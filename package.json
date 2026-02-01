@@ -1,6 +1,6 @@
 {
   "name": "@capgo/capacitor-age-range",
-  "version": "8.0.0",
+  "version": "8.1.0",
   "description": "Cross-platform age range detection. Google Play Age Signals on Android, Apple DeclaredAgeRange on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
