@@ -3,7 +3,7 @@ import Capacitor
 
 @objc(AgeRangePlugin)
 public class AgeRangePlugin: CAPPlugin, CAPBridgedPlugin {
-    private let pluginVersion: String = "8.1.0"
+    private let pluginVersion: String = "8.1.1"
     public let identifier = "AgeRangePlugin"
     public let jsName = "AgeRange"
     public let pluginMethods: [CAPPluginMethod] = [
