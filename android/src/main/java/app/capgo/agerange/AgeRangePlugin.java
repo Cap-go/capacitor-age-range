@@ -16,7 +16,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "AgeRange")
 public class AgeRangePlugin extends Plugin {
 
-    private final String pluginVersion = "8.1.2";
+    private final String pluginVersion = "8.1.3";
     public static final String TAG = "AgeRange";
     private static final String ERROR_UNKNOWN = "An unknown error occurred.";
 
