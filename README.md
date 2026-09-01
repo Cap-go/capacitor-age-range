@@ -67,7 +67,7 @@ npx cap sync
 
 Add the `com.apple.developer.declared-age-range` entitlement to your app:
 
-1. In Xcode, select your target → **Signing & Capabilities**
+1. In Xcode, select your target → **Signing \u0026 Capabilities**
 2. Click **+ Capability** → search for **Declared Age Range**
 3. Enable it
 
@@ -150,7 +150,7 @@ On iOS: presents the system DeclaredAgeRange dialog (requires iOS 26.2+).
 | ------------- | ------------------------------------------------------------------------- | ----------------------------------------- |
 | **`options`** | <code><a href="#requestagerangeoptions">RequestAgeRangeOptions</a></code> | - Configuration for the age range request |
 
-**Returns:** <code>Promise&lt;<a href="#agerangeresult">AgeRangeResult</a></code>
+**Returns:** <code>Promise\u0026lt;<a href="#agerangeresult">AgeRangeResult</a>\u0026gt;</code>
 
 **Since:** 8.0.0
 
@@ -165,7 +165,7 @@ getPluginVersion() => Promise<{ version: string; }>
 
 Get the native Capacitor plugin version.
 
-**Returns:** <code>Promise&lt;{ version: string; }></code>
+**Returns:** <code>Promise\u0026lt;{ version: string; }\u0026gt;</code>
 
 **Since:** 8.0.0
 
