@@ -65,18 +65,61 @@ npx cap sync
 
 ### Entitlement
 
-Add the `com.apple.developer.declared-age-range` entitlement to your app:
+`requestAgeRange()` needs this capability **signed into the iOS app**. Edit two files, then enable it on the App ID.
 
-1. In Xcode, select your target → **Signing & Capabilities**
-2. Click **+ Capability** → search for **Declared Age Range**
-3. Enable it
+#### 1. File `ios/App/App/App.entitlements`
 
-Or add manually to your `*.entitlements` file:
+Paste these two lines **inside** the existing `<dict>` (keep keys you already have, such as `aps-environment`):
 
 ```xml
-<key>com.apple.developer.declared-age-range</key>
-<true/>
+	<key>com.apple.developer.declared-age-range</key>
+	<true/>
 ```
+
+If that file does not exist, create `ios/App/App/App.entitlements` with this exact content:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.declared-age-range</key>
+	<true/>
+</dict>
+</plist>
+```
+
+#### 2. File `ios/App/App.xcodeproj/project.pbxproj`
+
+The entitlements file is ignored until this line is on the **App target** for **both Debug and Release**. Search the file for the two App-target `buildSettings` blocks that contain `PRODUCT_BUNDLE_IDENTIFIER` (not the project-level configs) and add:
+
+```
+CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
+```
+
+It should sit next to the other signing keys, for example:
+
+```
+CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
+CODE_SIGN_STYLE = Automatic;
+```
+
+Xcode UI does the same two files: Target → **Signing & Capabilities** → **+ Capability** → **Declared Age Range**.
+
+#### 3. Apple Developer App ID
+
+1. Open [Identifiers](https://developer.apple.com/account/resources/identifiers/list) → your App ID → enable **Declared Age Range**.
+2. Regenerate provisioning profiles, then archive again.
+
+Without steps 1–3, in-app `requestAgeRange()` fails. This entitlement does **not** control App Store download of 18+ apps in Australia, Brazil, and Singapore — Apple performs that adult confirmation automatically from the listing age rating.
+
+Verify before shipping:
+
+```bash
+npx @capgo/cli@latest build prescan
+```
+
+The check id is `ios/entitlements-declared-age-range`.
 
 ### How it works
 
