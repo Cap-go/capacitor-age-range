@@ -2,7 +2,7 @@
 <a href="https://capgo.app/"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-age-range" alt="Capgo - Instant updates for Capacitor" /></a>
 
 <div align="center">
-  <h2><a href="https://capgo.app/?ref=plugin_age_range"> ➡️ Get Instant updates for your App with Capgo</a></h2>
+  <h2><a href="https://capgo.app/?ref=plugin_age_range"> ➞ Get Instant updates for your App with Capgo</a></h2>
   <h2><a href="https://capgo.app/consulting/?ref=plugin_age_range"> Missing a feature? We'll build the plugin for you 💪</a></h2>
 </div>
 
@@ -86,7 +86,7 @@ The entitlements file is ignored unless Xcode `CODE_SIGN_ENTITLEMENTS` is set on
 2. Set `CODE_SIGN_ENTITLEMENTS` to your entitlements file (Debug and Release).
 3. Regenerate provisioning profiles, then archive again.
 
-If this is missing, App Store installs of **18+** apps in **Australia, Brazil, and Singapore** fail on iOS 26+ with Apple's generic Media Services dialog **"There was an error. Please try later."** (no error code). That is store age-assurance, not an in-app plugin crash.
+Without that, in-app `requestAgeRange()` calls fail. This entitlement does **not** control App Store download of 18+ apps in Australia, Brazil, and Singapore — Apple performs that adult confirmation automatically based on the listing age rating.
 
 Optional check before shipping:
 
