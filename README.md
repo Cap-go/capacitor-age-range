@@ -78,6 +78,24 @@ Or add manually to your `*.entitlements` file:
 <true/>
 ```
 
+#### App ID and signing (required for App Store)
+
+The entitlements file is ignored unless Xcode `CODE_SIGN_ENTITLEMENTS` is set on the **app target** for both Debug and Release. Capacitor apps often have `App.entitlements` on disk without this build setting.
+
+1. Enable **Declared Age Range** on the App ID in [Apple Developer](https://developer.apple.com/account/resources/identifiers/list).
+2. Set `CODE_SIGN_ENTITLEMENTS` to your entitlements file (Debug and Release).
+3. Regenerate provisioning profiles, then archive again.
+
+If this is missing, App Store installs of **18+** apps in **Australia, Brazil, and Singapore** fail on iOS 26+ with Apple's generic Media Services dialog **"There was an error. Please try later."** (no error code). That is store age-assurance, not an in-app plugin crash.
+
+Optional check before shipping:
+
+```bash
+npx @capgo/cli@latest build prescan
+```
+
+Look for check id `ios/entitlements-declared-age-range`.
+
 ### How it works
 
 On iOS, `requestAgeRange()` presents a system dialog where the user (or their guardian via Family Sharing) declares their age range. The `ageGates` option controls the age boundaries shown in the dialog (default: `[13, 16, 18]`).
@@ -132,7 +150,7 @@ On iOS: presents the system DeclaredAgeRange dialog (requires iOS 26.2+).
 | ------------- | ------------------------------------------------------------------------- | ----------------------------------------- |
 | **`options`** | <code><a href="#requestagerangeoptions">RequestAgeRangeOptions</a></code> | - Configuration for the age range request |
 
-**Returns:** <code>Promise&lt;<a href="#agerangeresult">AgeRangeResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#agerangeresult">AgeRangeResult</a></code>
 
 **Since:** 8.0.0
 
@@ -147,7 +165,7 @@ getPluginVersion() => Promise<{ version: string; }>
 
 Get the native Capacitor plugin version.
 
-**Returns:** <code>Promise&lt;{ version: string; }&gt;</code>
+**Returns:** <code>Promise&lt;{ version: string; }></code>
 
 **Since:** 8.0.0
 
