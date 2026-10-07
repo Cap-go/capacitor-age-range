@@ -302,7 +302,7 @@ const result2 = await AgeRange.requestAgeRange({ ageGates: [13, 18] });
 | SUPERVISED                      | SHARING            | GUARDIAN_DECLARED   |
 | SUPERVISED_APPROVAL_PENDING     | SHARING            | GUARDIAN_DECLARED   |
 | SUPERVISED_APPROVAL_DENIED      | SHARING            | GUARDIAN_DECLARED   |
-| UNKNOWN / EMPTY                 | DECLINED_SHARING   |, |
+| UNKNOWN / EMPTY                 | DECLINED_SHARING   | - |
 
 ### iOS (DeclaredAgeRange)
 
@@ -310,4 +310,4 @@ const result2 = await AgeRange.requestAgeRange({ ageGates: [13, 18] });
 | ------------------------------- | ------------------ | ------------------- |
 | .sharing (selfDeclared)         | SHARING            | SELF_DECLARED       |
 | .sharing (guardianDeclared)     | SHARING            | GUARDIAN_DECLARED   |
-| .declinedSharing                | DECLINED_SHARING   |, |
+| .declinedSharing                | DECLINED_SHARING   | - |
