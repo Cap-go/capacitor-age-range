@@ -1,12 +1,27 @@
 # capacitor-age-range
-<a href="https://capgo.app/"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-age-range" alt="Capgo - Instant updates for Capacitor" /></a>
+
+Ask the operating system for the user's age range instead of collecting birthdates: Google Play Age Signals on Android and Apple Declared Age Range on iOS. Helps apps meet age assurance rules with one call.
+
+<a href="https://capgo.app/?ref=plugin_age_range"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-age-range" alt="Capgo - Instant updates for Capacitor" /></a>
 
 <div align="center">
-  <h2><a href="https://capgo.app/?ref=plugin_age_range"> ➡️ Get Instant updates for your App with Capgo</a></h2>
-  <h2><a href="https://capgo.app/consulting/?ref=plugin_age_range"> Missing a feature? We'll build the plugin for you 💪</a></h2>
+  <p><b>Capgo</b>: open-source live updates for Ionic and Capacitor apps. Ship OTA fixes and features instantly, without waiting for app store review.</p>
+  <h2><a href="https://capgo.app/register/?ref=plugin_age_range">➡️ Get started for free</a></h2>
+  <p>14-day unlimited free trial. No credit card required</p>
+  <p><a href="https://capgo.app/consulting/?ref=plugin_age_range">Missing a feature? We'll build the plugin for you 💪</a></p>
 </div>
 
-Cross-platform age range detection for Capacitor apps. Uses **Google Play Age Signals** on Android and **Apple DeclaredAgeRange** on iOS.
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Cap-go/capacitor-age-range/main/assets/github-social-preview.png" alt="@capgo/capacitor-age-range for Capacitor apps" width="300" />
+</p>
+
+## Key features
+
+- **One call**: `requestAgeRange()` returns the user's age range through the platform API.
+- **Android**: uses the Google Play Age Signals library.
+- **iOS**: uses Apple's `DeclaredAgeRange` framework.
+- **Privacy friendly**: the app receives an age range from the OS, not a birthdate.
+- **Platforms**: iOS and Android. Not available on web (`requestAgeRange()` throws).
 
 ## Why Capacitor Age Range?
 
@@ -111,7 +126,7 @@ Xcode UI does the same two files: Target → **Signing & Capabilities** → **+ 
 1. Open [Identifiers](https://developer.apple.com/account/resources/identifiers/list) → your App ID → enable **Declared Age Range**.
 2. Regenerate provisioning profiles, then archive again.
 
-Without steps 1–3, in-app `requestAgeRange()` fails. This entitlement does **not** control App Store download of 18+ apps in Australia, Brazil, and Singapore — Apple performs that adult confirmation automatically from the listing age rating.
+Without steps 1 to 3, in-app `requestAgeRange()` fails. This entitlement does **not** control App Store download of 18+ apps in Australia, Brazil, and Singapore, Apple performs that adult confirmation automatically from the listing age rating.
 
 Verify before shipping:
 
@@ -134,7 +149,7 @@ On iOS, `requestAgeRange()` presents a system dialog where the user (or their gu
 
 ### How it works
 
-On Android, the plugin queries **Google Play Age Signals API** in the background — no user prompt is shown. The Play Store determines the user's age verification status from their Google account.
+On Android, the plugin queries **Google Play Age Signals API** in the background, no user prompt is shown. The Play Store determines the user's age verification status from their Google account.
 
 No additional permissions or manifest changes are needed.
 
@@ -287,7 +302,7 @@ const result2 = await AgeRange.requestAgeRange({ ageGates: [13, 18] });
 | SUPERVISED                      | SHARING            | GUARDIAN_DECLARED   |
 | SUPERVISED_APPROVAL_PENDING     | SHARING            | GUARDIAN_DECLARED   |
 | SUPERVISED_APPROVAL_DENIED      | SHARING            | GUARDIAN_DECLARED   |
-| UNKNOWN / EMPTY                 | DECLINED_SHARING   | —                   |
+| UNKNOWN / EMPTY                 | DECLINED_SHARING   | - |
 
 ### iOS (DeclaredAgeRange)
 
@@ -295,4 +310,4 @@ const result2 = await AgeRange.requestAgeRange({ ageGates: [13, 18] });
 | ------------------------------- | ------------------ | ------------------- |
 | .sharing (selfDeclared)         | SHARING            | SELF_DECLARED       |
 | .sharing (guardianDeclared)     | SHARING            | GUARDIAN_DECLARED   |
-| .declinedSharing                | DECLINED_SHARING   | —                   |
+| .declinedSharing                | DECLINED_SHARING   | - |
