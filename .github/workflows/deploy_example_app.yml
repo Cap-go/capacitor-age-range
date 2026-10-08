@@ -52,18 +52,11 @@ jobs:
           fi
           echo "value=${bundle}" >> "$GITHUB_OUTPUT"
 
-      - name: Capgo upload disabled notice
-        if: ${{ vars.CAPGO_EXAMPLE_UPLOAD_ENABLED != 'true' }}
-        run: |
-          echo "Skipping Capgo bundle upload because vars.CAPGO_EXAMPLE_UPLOAD_ENABLED is not true."
-          echo "Set the repository variable CAPGO_EXAMPLE_UPLOAD_ENABLED=true when the Capgo app exists."
-
       - name: Deploy to Capgo
-        if: ${{ vars.CAPGO_EXAMPLE_UPLOAD_ENABLED == 'true' }}
         working-directory: example-app
         run: |
           bunx @capgo/cli@latest bundle upload app.capgo.age.range \
-            --bundle "${{ steps.bundle_version.outputs.value }}" \
+            --bundle "$BUNDLE_VERSION" \
             --path dist \
             --channel production \
             --package-json package.json,../package.json \
@@ -73,4 +66,5 @@ jobs:
             --ignore-checksum-check \
             --apikey "$CAPGO_TOKEN"
         env:
+          BUNDLE_VERSION: ${{ steps.bundle_version.outputs.value }}
           CAPGO_TOKEN: ${{ secrets.CAPGO_TOKEN }}
