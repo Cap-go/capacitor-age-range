@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <title>@capgo/capacitor-age-range</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="brand">
+        <img class="brand-icon" src="/assets/capgo-icon.svg" width="40" height="40" alt="Capgo" />
+        <div>
+          <p class="eyebrow">Capgo plugin example</p>
+          <h1>Age range</h1>
+        </div>
+      </header>
+
+      <section class="panel requirements">
+        <h2>Platform requirements</h2>
+        <ul>
+          <li><strong>Android:</strong> Google Play Age Signals (no user prompt; predefined brackets).</li>
+          <li><strong>iOS:</strong> DeclaredAgeRange system dialog (iOS 26.2+).</li>
+          <li><strong>Web:</strong> Native API not available; calls surface an error here for wiring checks.</li>
+        </ul>
+      </section>
+
+      <section class="panel">
+        <div class="status-row">
+          <div>
+            <p class="label">Plugin version</p>
+            <strong id="plugin-version" class="chip">Loading</strong>
+          </div>
+          <div>
+            <p class="label">Last status</p>
+            <strong id="status-chip" class="chip muted">None</strong>
+          </div>
+        </div>
+
+        <label class="field" for="age-gates">
+          <span class="label">Age gates (comma separated)</span>
+          <input id="age-gates" type="text" value="13, 16, 18" autocomplete="off" spellcheck="false" />
+          <span class="hint">Used on iOS for the system dialog. Ignored on Android.</span>
+        </label>
+
+        <div class="actions">
+          <button id="request-age-range" type="button">Request age range</button>
+          <button id="get-version" class="ghost" type="button">Refresh plugin version</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 class="section-title">Result</h2>
+        <div id="result-card" class="result-card">
+          <p class="result-placeholder">Tap Request age range to call the native plugin.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="json-header">
+          <h2 class="section-title">Raw JSON</h2>
+          <button id="clear-json" class="ghost small" type="button">Clear</button>
+        </div>
+        <pre id="json-output" class="json-pane">{}</pre>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
