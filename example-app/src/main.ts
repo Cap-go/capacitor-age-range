@@ -44,9 +44,13 @@ const formatRange = (result: AgeRangeResult): string => {
   if (result.ageLower === undefined && result.ageUpper === undefined) {
     return 'No numeric range returned';
   }
-  const lower = result.ageLower ?? '?';
-  const upper = result.ageUpper ?? '18+';
-  return `${lower} to ${upper}`;
+  if (result.ageLower !== undefined && result.ageUpper === undefined) {
+    return `${result.ageLower}+`;
+  }
+  if (result.ageLower === undefined && result.ageUpper !== undefined) {
+    return `Up to ${result.ageUpper}`;
+  }
+  return `${result.ageLower} to ${result.ageUpper}`;
 };
 
 const renderResultCard = (result: AgeRangeResult) => {
@@ -87,12 +91,17 @@ const parseAgeGates = (raw: string): number[] => {
     .split(/[,;\s]+/)
     .map((part) => part.trim())
     .filter(Boolean);
-  const gates = parts.map((part) => Number.parseInt(part, 10));
-  if (gates.some((gate) => Number.isNaN(gate))) {
-    throw new Error('Age gates must be whole numbers separated by commas.');
-  }
+  const gates = parts.map((part) => {
+    if (!/^\d+$/.test(part)) {
+      throw new Error('Age gates must be whole numbers separated by commas.');
+    }
+    return Number.parseInt(part, 10);
+  });
   if (gates.length === 0) {
     throw new Error('Provide at least one age gate.');
+  }
+  if (gates.length > 3) {
+    throw new Error('Provide at most three age gates (iOS uses the first three).');
   }
   return gates;
 };
