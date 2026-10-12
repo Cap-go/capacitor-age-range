@@ -2,7 +2,7 @@
 
 Ask the operating system for the user's age range instead of collecting birthdates: Google Play Age Signals on Android and Apple Declared Age Range on iOS. Helps apps meet age assurance rules with one call.
 
-<a href="https://capgo.app/?ref=plugin_age_range"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-age-range" alt="Capgo - Instant updates for Capacitor" /></a>
+<a href="https://capgo.app/?ref=plugin_age_range"><img src="https://capgo.app/readme-banner.svg?repo=Cap-go/capacitor-age-range" alt="Capgo - Build Capacitor apps with AI, ship updates instantly" /></a>
 
 <div align="center">
   <p><b>Capgo</b>: push fixes to your Capacitor users in minutes, build signed iOS and Android apps without a Mac, and roll back in one click.</p>
@@ -10,6 +10,8 @@ Ask the operating system for the user's age range instead of collecting birthdat
   <p>14-day unlimited free trial. No credit card required</p>
   <p><a href="https://capgo.app/consulting/?ref=plugin_age_range">Missing a feature? We'll build the plugin for you 💪</a></p>
 </div>
+
+> 🤖 **Building with an AI coding agent?** Install [Capgo skills](https://capgo.app/skills/?ref=plugin_age_range) so Claude Code, Codex, Cursor, Copilot, or Gemini CLI know how to install and use `@capgo/capacitor-age-range` in your Capacitor app: `npx skills add Cap-go/capgo-skills`. Then ask your agent: *"Add @capgo/capacitor-age-range to my Capacitor app and wire it up."* [Agent setup guides](https://capgo.app/agents/?ref=plugin_age_range) · [Hosted MCP](https://capgo.app/docs/ai/mcp/?ref=plugin_age_range)
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Cap-go/capacitor-age-range/main/assets/github-social-preview.png" alt="@capgo/capacitor-age-range for Capacitor apps" width="300" />
