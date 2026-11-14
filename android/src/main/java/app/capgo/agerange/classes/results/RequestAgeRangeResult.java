@@ -6,6 +6,7 @@ import app.capgo.agerange.enums.UserStatus;
 import app.capgo.agerange.interfaces.Result;
 import com.getcapacitor.JSObject;
 import com.google.android.play.agesignals.AgeSignalsResult;
+import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus;
 
 public class RequestAgeRangeResult implements Result {
 
@@ -25,7 +26,7 @@ public class RequestAgeRangeResult implements Result {
     private final String installId;
 
     public RequestAgeRangeResult(@NonNull AgeSignalsResult ageSignalsResult) {
-        this.userStatus = mapUserStatus(ageSignalsResult.userStatus().toString());
+        this.userStatus = mapUserStatus(ageSignalsResult.userStatus());
         this.ageLower = ageSignalsResult.ageLower();
         this.ageUpper = ageSignalsResult.ageUpper();
         this.mostRecentApprovalDate =
@@ -76,17 +77,20 @@ public class RequestAgeRangeResult implements Result {
     }
 
     @NonNull
-    private UserStatus mapUserStatus(@NonNull String status) {
+    static UserStatus mapUserStatus(@Nullable Integer status) {
+        if (status == null) {
+            return UserStatus.EMPTY;
+        }
         switch (status) {
-            case "VERIFIED":
+            case AgeSignalsVerificationStatus.VERIFIED:
                 return UserStatus.VERIFIED;
-            case "SUPERVISED":
+            case AgeSignalsVerificationStatus.SUPERVISED:
                 return UserStatus.SUPERVISED;
-            case "SUPERVISED_APPROVAL_PENDING":
+            case AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING:
                 return UserStatus.SUPERVISED_APPROVAL_PENDING;
-            case "SUPERVISED_APPROVAL_DENIED":
+            case AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED:
                 return UserStatus.SUPERVISED_APPROVAL_DENIED;
-            case "UNKNOWN":
+            case AgeSignalsVerificationStatus.UNKNOWN:
                 return UserStatus.UNKNOWN;
             default:
                 return UserStatus.EMPTY;
