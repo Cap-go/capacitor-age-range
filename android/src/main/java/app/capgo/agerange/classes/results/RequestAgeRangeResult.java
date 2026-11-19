@@ -67,6 +67,10 @@ public class RequestAgeRangeResult implements Result {
     }
 
     public RequestAgeRangeResult(@NonNull AgeSignalsResult ageSignalsResult) {
+        this(ageSignalsResult, null);
+    }
+
+    public RequestAgeRangeResult(@NonNull AgeSignalsResult ageSignalsResult, @Nullable Integer ageSignalsAccessStatus) {
         Integer ageRangeSourceValue = ageSignalsResult.ageRangeSource();
         Integer significantChangeStatusValue = ageSignalsResult.significantChangeStatus();
         Integer ageLowerValue = ageSignalsResult.ageLower();
@@ -98,7 +102,7 @@ public class RequestAgeRangeResult implements Result {
         this.significantChangeStatus = mapSignificantChangeStatus(significantChangeStatusValue);
         this.significantChangeApprovalDate = approvalDate;
         this.installId = ageSignalsResult.installId();
-        this.androidAgeSignalsAccessStatus = null;
+        this.androidAgeSignalsAccessStatus = ageSignalsAccessStatus != null ? mapAgeSignalsAccessStatus(ageSignalsAccessStatus) : null;
     }
 
     @NonNull
@@ -268,9 +272,6 @@ public class RequestAgeRangeResult implements Result {
                 return UserStatus.SUPERVISED;
             case AgeRangeSource.TIER_A:
             default:
-                if (isVerifiedAdultTier(ageRangeSource, ageLower, ageUpper)) {
-                    return UserStatus.VERIFIED;
-                }
                 return UserStatus.UNKNOWN;
         }
     }

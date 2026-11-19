@@ -1,6 +1,7 @@
 package app.capgo.agerange;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import app.capgo.agerange.classes.CustomExceptions;
 import app.capgo.agerange.classes.results.RequestAgeRangeResult;
 import app.capgo.agerange.interfaces.NonEmptyResultCallback;
@@ -74,7 +75,7 @@ public class AgeRange {
             .addOnSuccessListener((accessResult) -> {
                 Integer accessStatus = accessResult.ageSignalsStatus();
                 if (accessStatus != null && accessStatus == AgeSignalsStatus.SHARED) {
-                    checkAgeSignalsOnly(manager, callback);
+                    checkAgeSignalsOnly(manager, callback, accessStatus);
                     return;
                 }
                 try {
@@ -87,12 +88,20 @@ public class AgeRange {
     }
 
     private void checkAgeSignalsOnly(@NonNull AgeSignalsManager manager, @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback) {
+        checkAgeSignalsOnly(manager, callback, null);
+    }
+
+    private void checkAgeSignalsOnly(
+        @NonNull AgeSignalsManager manager,
+        @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback,
+        @Nullable Integer ageSignalsAccessStatus
+    ) {
         AgeSignalsRequest request = AgeSignalsRequest.builder().build();
 
         Task<AgeSignalsResult> task = manager.checkAgeSignals(request);
         task.addOnSuccessListener((ageSignalsResult) -> {
             try {
-                RequestAgeRangeResult result = new RequestAgeRangeResult(ageSignalsResult);
+                RequestAgeRangeResult result = new RequestAgeRangeResult(ageSignalsResult, ageSignalsAccessStatus);
                 callback.success(result);
             } catch (Exception exception) {
                 callback.error(exception);

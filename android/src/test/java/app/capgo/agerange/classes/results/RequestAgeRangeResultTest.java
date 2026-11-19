@@ -52,6 +52,34 @@ public class RequestAgeRangeResultTest {
     }
 
     @Test
+    public void tierASelfDeclaredAdult_legacyStatusIsUnknown() {
+        AgeSignalsResult signals = AgeSignalsResult.builder()
+            .setAgeRangeSource(AgeRangeSource.TIER_A)
+            .setAgeLower(18)
+            .setAgeUpper(null)
+            .build();
+
+        RequestAgeRangeResult result = new RequestAgeRangeResult(signals);
+
+        assertEquals("SHARING", result.statusForTests());
+        assertEquals("SELF_DECLARED", result.declarationSourceForTests());
+        assertEquals(UserStatus.UNKNOWN, result.androidUserStatusForTests());
+    }
+
+    @Test
+    public void constructor_preservesSuccessfulAccessStatus() {
+        AgeSignalsResult signals = AgeSignalsResult.builder()
+            .setAgeRangeSource(AgeRangeSource.TIER_D)
+            .setAgeLower(18)
+            .setAgeUpper(null)
+            .build();
+
+        RequestAgeRangeResult result = new RequestAgeRangeResult(signals, AgeSignalsStatus.SHARED);
+
+        assertEquals("SHARED", result.androidAgeSignalsAccessStatusForTests());
+    }
+
+    @Test
     public void tierDResult_mapsToSharingWithNewFields() {
         AgeSignalsResult signals = AgeSignalsResult.builder()
             .setAgeRangeSource(AgeRangeSource.TIER_D)

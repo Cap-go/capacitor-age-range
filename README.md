@@ -351,7 +351,7 @@ const result2 = await AgeRange.requestAgeRange({ ageGates: [13, 18] });
 | TIER_B           | PENDING                   | SHARING            | GUARDIAN_DECLARED     | SUPERVISED_APPROVAL_PENDING        |
 | TIER_B           | DECLINED                  | SHARING            | GUARDIAN_DECLARED     | SUPERVISED_APPROVAL_DENIED         |
 | TIER_B           | other / null              | SHARING            | GUARDIAN_DECLARED     | SUPERVISED                         |
-| TIER_A           | (any)                     | SHARING            | SELF_DECLARED         | VERIFIED if 18+, else UNKNOWN      |
+| TIER_A           | (any)                     | SHARING            | SELF_DECLARED         | UNKNOWN (self-declared, not verified) |
 | null / UNSPECIFIED | -                       | DECLINED_SHARING   | -                     | UNKNOWN                            |
 
 When `androidAgeSignalsAccess` is not `never`, `requestAgeSignalsAccess()` may return `NOT_SHARED` (`DECLINED_SHARING`) or `VERIFICATION_REQUIRED` (`NOT_AVAILABLE` plus `androidAgeSignalsAccessStatus`).
