@@ -64,14 +64,27 @@ const renderResultCard = (result: AgeRangeResult) => {
       `<p><span class="result-label">Declaration</span><strong>${result.declarationSource}</strong></p>`,
     );
   }
+  if (result.ageRangeSource) {
+    rows.push(`<p><span class="result-label">Age range source</span><strong>${result.ageRangeSource}</strong></p>`);
+  }
+  if (result.significantChangeStatus) {
+    rows.push(
+      `<p><span class="result-label">Significant change</span><strong>${result.significantChangeStatus}</strong></p>`,
+    );
+  }
   if (result.androidUserStatus) {
     rows.push(
       `<p><span class="result-label">Android user status</span><strong>${result.androidUserStatus}</strong></p>`,
     );
   }
-  if (result.mostRecentApprovalDate) {
+  if (result.significantChangeApprovalDate ?? result.mostRecentApprovalDate) {
     rows.push(
-      `<p><span class="result-label">Last approval</span><strong>${result.mostRecentApprovalDate}</strong></p>`,
+      `<p><span class="result-label">Last approval</span><strong>${result.significantChangeApprovalDate ?? result.mostRecentApprovalDate}</strong></p>`,
+    );
+  }
+  if (result.androidAgeSignalsAccessStatus) {
+    rows.push(
+      `<p><span class="result-label">Access status</span><strong>${result.androidAgeSignalsAccessStatus}</strong></p>`,
     );
   }
   if (result.installId) {

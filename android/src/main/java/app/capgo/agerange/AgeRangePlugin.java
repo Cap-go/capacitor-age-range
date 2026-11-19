@@ -47,7 +47,8 @@ public class AgeRangePlugin extends Plugin {
                 return;
             }
 
-            implementation.requestAgeRange(callback);
+            String androidAgeSignalsAccess = call.getString("androidAgeSignalsAccess", AgeRange.ACCESS_NEVER);
+            implementation.requestAgeRange(androidAgeSignalsAccess, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
