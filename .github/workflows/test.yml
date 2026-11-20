@@ -143,6 +143,8 @@ jobs:
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
       - name: Build example app for Android
+        env:
+          CAPGO_MAESTRO_CI: '1'
         run: bun run example-app:prepare:android
       - name: Enable KVM group perms
         run: |

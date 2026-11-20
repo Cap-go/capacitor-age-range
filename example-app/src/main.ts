@@ -11,6 +11,14 @@ import {
   withMaestroTimeout,
 } from './maestro';
 
+const isMaestroAutoHarness =
+  Capacitor.isNativePlatform() &&
+  document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
+
+if (isMaestroAutoHarness) {
+  setMaestroMarker('Maestro harness: starting');
+}
+
 const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
 const statusChipEl = document.getElementById('status-chip') as HTMLElement;
 const ageGatesInput = document.getElementById('age-gates') as HTMLInputElement;
@@ -169,27 +177,22 @@ clearJsonButton.addEventListener('click', () => {
 const maestroDefaultButton = document.getElementById('maestro-run-default-never') as HTMLButtonElement;
 const maestroMandatoryButton = document.getElementById('maestro-run-when-mandatory') as HTMLButtonElement;
 
-maestroDefaultButton.addEventListener('click', () => {
+maestroDefaultButton?.addEventListener('click', () => {
   void runMaestroDefaultNever();
 });
 
-maestroMandatoryButton.addEventListener('click', () => {
+maestroMandatoryButton?.addEventListener('click', () => {
   void runMaestroWhenMandatory();
 });
 
-const maestroAutoHarness =
-  Capacitor.isNativePlatform() && document.getElementById('maestro-marker')?.dataset.auto === 'true';
-
-if (!maestroAutoHarness) {
+if (!isMaestroAutoHarness) {
   void refreshPluginVersion();
 }
 
 const runNativeMaestroHarness = async () => {
-  const marker = document.getElementById('maestro-marker');
-  if (!marker || marker.dataset.auto !== 'true') {
+  if (!isMaestroAutoHarness) {
     return;
   }
-  setMaestroMarker('Maestro harness: starting');
   try {
     await withMaestroTimeout(refreshPluginVersion(), 'getPluginVersion');
   } catch {
@@ -205,8 +208,8 @@ if (Capacitor.isNativePlatform()) {
   void runNativeMaestroHarness();
 }
 
-if (Capacitor.isNativePlatform()) {
-  CapacitorUpdater.notifyAppReady().catch((error) => {
+if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
+  CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
     console.error('Capgo notifyAppReady failed', error);
   });
 }
