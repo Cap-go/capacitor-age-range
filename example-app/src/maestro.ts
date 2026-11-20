@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { AgeRange } from '@capgo/capacitor-age-range';
-import type { AgeRangeResult } from '@capgo/capacitor-age-range';
+import type { AgeRangeResult, RequestAgeRangeOptions } from '@capgo/capacitor-age-range';
 
 const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 
@@ -58,8 +58,21 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
   if (readyBanner) {
     readyBanner.textContent = line;
   }
+  if (typeof document !== 'undefined' && document.title) {
+    document.title = line;
+  }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
+
+const isMaestroCiUnavailableRequest = (): boolean =>
+  document.getElementById('maestro-marker')?.getAttribute('data-ios-ci-unavailable') === 'true';
+
+const defaultNeverOptions = (): RequestAgeRangeOptions => ({
+  ageGates: [13, 16, 18],
+  ...(Capacitor.getPlatform() === 'ios' && isMaestroCiUnavailableRequest()
+    ? { maestroCiUnavailable: true }
+    : {}),
+});
 
 export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
@@ -103,7 +116,7 @@ export const runMaestroDefaultNever = async (): Promise<void> => {
   setMaestroHarnessStatus('Maestro harness: starting');
   try {
     const result = await withMaestroTimeout(
-      AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
+      AgeRange.requestAgeRange(defaultNeverOptions()),
       'requestAgeRange default never',
     );
     publishMaestroPluginOutcome('default', result);

@@ -32,6 +32,11 @@ if (!/publishMaestroPluginOutcome\(\s*['"]default['"]/s.test(maestroSource)) {
   process.exit(1);
 }
 
+if (!/maestroCiUnavailable:\s*true/.test(maestroSource)) {
+  console.error('Maestro harness must pass maestroCiUnavailable on iOS CI');
+  process.exit(1);
+}
+
 if (!/status=\$\{status\}/.test(maestroSource)) {
   console.error('Maestro harness must encode plugin status in outcome lines');
   process.exit(1);

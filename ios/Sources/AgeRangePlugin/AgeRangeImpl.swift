@@ -11,8 +11,13 @@ class AgeRangeImpl {
         (Bundle.main.object(forInfoDictionaryKey: "CapgoMaestroCiUnavailable") as? Bool) == true
     }
 
-    func requestAgeRange(ageGates: [Int], viewController: UIViewController, completion: @escaping ([String: Any]) -> Void) {
-        if shouldUseMaestroCiUnavailablePath() {
+    func requestAgeRange(
+        ageGates: [Int],
+        viewController: UIViewController,
+        maestroCiUnavailable: Bool,
+        completion: @escaping ([String: Any]) -> Void
+    ) {
+        if maestroCiUnavailable || shouldUseMaestroCiUnavailablePath() {
             completion(["status": "NOT_AVAILABLE"])
             return
         }

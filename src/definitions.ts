@@ -73,6 +73,14 @@ export interface RequestAgeRangeOptions {
    * @since 8.3.0
    */
   androidAgeSignalsAccess?: AndroidAgeSignalsAccessMode;
+
+  /**
+   * iOS only (example-app Maestro CI). When true, native code returns `NOT_AVAILABLE`
+   * without presenting Declared Age Range UI. Ignored on Android and Web.
+   *
+   * @internal
+   */
+  maestroCiUnavailable?: boolean;
 }
 
 /**
