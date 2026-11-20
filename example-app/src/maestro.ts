@@ -1,7 +1,27 @@
 import { Capacitor } from '@capacitor/core';
 import { AgeRange } from '@capgo/capacitor-age-range';
 
+const MAESTRO_PLUGIN_TIMEOUT_MS = 90_000;
+
 const markerEl = () => document.getElementById('maestro-marker') as HTMLElement | null;
+
+const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`${label} timed out after ${MAESTRO_PLUGIN_TIMEOUT_MS}ms`));
+    }, MAESTRO_PLUGIN_TIMEOUT_MS);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      },
+    );
+  });
+};
 
 const setMaestroMarker = (message: string) => {
   const el = markerEl();
@@ -10,24 +30,6 @@ const setMaestroMarker = (message: string) => {
   }
   el.hidden = false;
   el.textContent = message;
-};
-
-const NATIVE_CALL_TIMEOUT_MS = 90_000;
-
-const withTimeout = async <T>(promise: Promise<T>, label: string): Promise<T> => {
-  let timer: ReturnType<typeof setTimeout> | undefined;
-  const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => {
-      reject(new Error(`${label} timed out after ${NATIVE_CALL_TIMEOUT_MS}ms`));
-    }, NATIVE_CALL_TIMEOUT_MS);
-  });
-  try {
-    return await Promise.race([promise, timeout]);
-  } finally {
-    if (timer) {
-      clearTimeout(timer);
-    }
-  }
 };
 
 export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): string => {
@@ -42,7 +44,7 @@ export const classifyMaestroOutcome = (status: string | undefined, isError: bool
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
   try {
-    const result = await withTimeout(
+    const result = await withMaestroTimeout(
       AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
       'requestAgeRange default never',
     );
@@ -56,7 +58,7 @@ export const runMaestroDefaultNever = async (): Promise<void> => {
 
 export const runMaestroWhenMandatory = async (): Promise<void> => {
   try {
-    const result = await withTimeout(
+    const result = await withMaestroTimeout(
       AgeRange.requestAgeRange({
         ageGates: [13, 16, 18],
         androidAgeSignalsAccess: Capacitor.getPlatform() === 'android' ? 'whenMandatory' : undefined,

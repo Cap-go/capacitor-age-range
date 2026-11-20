@@ -13,7 +13,7 @@ if [ -z "$app_bundle" ]; then
   elif [ -d maestro-artifacts/App.app ]; then
     app_bundle="maestro-artifacts/App.app"
   else
-    app_bundle="$(find maestro-artifacts -maxdepth 6 -type d -name '*.app' 2>/dev/null | head -n 1 || true)"
+    app_bundle="$(find maestro-artifacts -type d -name '*.app' 2>/dev/null | head -n 1 || true)"
   fi
 fi
 
@@ -22,7 +22,10 @@ if [ -z "$app_bundle" ] || [ ! -d "$app_bundle" ]; then
 fi
 
 if [ -z "$app_bundle" ] || [ ! -d "$app_bundle" ]; then
-  echo "Simulator app bundle not found"
+  echo "Simulator app bundle not found under maestro-artifacts"
+  if [ -d maestro-artifacts ]; then
+    find maestro-artifacts -maxdepth 4 -print 2>/dev/null | head -n 40 || true
+  fi
   exit 1
 fi
 
