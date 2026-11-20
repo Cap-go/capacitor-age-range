@@ -14,8 +14,13 @@ androidWebViewHierarchy: devtools
     timeout: 120000
 - assertVisible:
     id: 'maestro-ready'
+- scrollUntilVisible:
+    element:
+      text: 'Maestro default (never)'
+    direction: DOWN
+    timeout: 90000
 - tapOn:
-    id: 'maestro-run-default-never'
+    text: 'Maestro default (never)'
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible:
@@ -23,8 +28,13 @@ androidWebViewHierarchy: devtools
     timeout: 90000
 - assertVisible:
     id: 'maestro-static-default-unavailable'
+- scrollUntilVisible:
+    element:
+      text: 'Maestro whenMandatory'
+    direction: DOWN
+    timeout: 60000
 - tapOn:
-    id: 'maestro-run-when-mandatory'
+    text: 'Maestro whenMandatory'
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible:
