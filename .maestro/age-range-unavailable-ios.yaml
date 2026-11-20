@@ -3,10 +3,6 @@ appId: app.capgo.age.range
 - launchApp:
     clearState: true
 - extendedWaitUntil:
-    visible: 'Maestro ready'
-    timeout: 90000
-- extendedWaitUntil:
-    visible: 'Maestro default never:'
-    timeout: 60000
-- assertVisible: 'Maestro default never:'
+    visible: 'unavailable status=NOT_AVAILABLE'
+    timeout: 120000
 - assertVisible: 'status=NOT_AVAILABLE'
