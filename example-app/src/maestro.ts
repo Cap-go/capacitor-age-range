@@ -41,8 +41,14 @@ export const classifyMaestroOutcome = (status: string | undefined, isError: bool
   return 'completed';
 };
 
+const staticOutcomeId = (flow: MaestroFlow, bucket: MaestroBucket): string =>
+  `maestro-static-${flow}-${bucket}`;
+
 export const revealMaestroStaticOutcome = (flow: MaestroFlow, bucket: MaestroBucket) => {
-  document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
+  document.querySelectorAll<HTMLElement>('[data-maestro-static-outcome]').forEach((element) => {
+    element.setAttribute('hidden', '');
+  });
+  document.getElementById(staticOutcomeId(flow, bucket))?.removeAttribute('hidden');
 };
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
