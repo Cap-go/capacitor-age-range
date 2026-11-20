@@ -25,4 +25,4 @@ androidWebViewHierarchy: devtools
 - assertVisible:
     id: maestro-outcome-default-detail
 - assertVisible:
-    text: '.*code=API_NOT_AVAILABLE.*'
+    text: '.*Maestro default never: .*status=NOT_AVAILABLE.*'

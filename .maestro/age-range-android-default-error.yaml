@@ -22,5 +22,9 @@ androidWebViewHierarchy: devtools
     timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-default-detail'
+- assertNotVisible:
+    text: '.*UNIMPLEMENTED.*'
+- assertNotVisible:
+    text: '.*Maestro default never:.*status=pending.*'
 - assertVisible:
-    text: '.*code=API_NOT_AVAILABLE.*'
+    text: '.*Maestro default never: .*(status=NOT_AVAILABLE|error code=API_NOT_AVAILABLE).*'
