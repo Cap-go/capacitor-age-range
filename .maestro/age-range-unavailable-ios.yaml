@@ -5,20 +5,15 @@ appId: app.capgo.age.range
     element:
       id: 'maestro-ready'
     direction: DOWN
-    timeout: 120000
+    timeout: 60000
 - assertVisible:
     id: 'maestro-ready'
-- scrollUntilVisible:
-    element:
-      text: 'Maestro default (never)'
-    direction: DOWN
-    timeout: 90000
 - tapOn:
-    text: 'Maestro default (never)'
+    id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible:
       id: 'maestro-static-default-unavailable'
-    timeout: 90000
+    timeout: 60000
 - assertVisible:
     id: 'maestro-static-default-unavailable'
