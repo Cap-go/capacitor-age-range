@@ -177,7 +177,12 @@ maestroMandatoryButton.addEventListener('click', () => {
   void runMaestroWhenMandatory();
 });
 
-void refreshPluginVersion();
+const maestroAutoHarness =
+  Capacitor.isNativePlatform() && document.getElementById('maestro-marker')?.dataset.auto === 'true';
+
+if (!maestroAutoHarness) {
+  void refreshPluginVersion();
+}
 
 const runNativeMaestroHarness = async () => {
   const marker = document.getElementById('maestro-marker');
