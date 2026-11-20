@@ -7,5 +7,5 @@ appId: app.capgo.age.range
     timeout: 90000
 - extendedWaitUntil:
     visible: 'Maestro default never: unavailable'
-    timeout: 120000
+    timeout: 60000
 - assertVisible: 'Maestro default never: unavailable'
