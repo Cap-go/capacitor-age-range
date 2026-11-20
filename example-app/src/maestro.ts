@@ -28,6 +28,10 @@ export const setMaestroHarnessStatus = (message: string) => {
   if (harnessLine) {
     harnessLine.textContent = message;
   }
+  const ready = document.getElementById('maestro-ready');
+  if (ready) {
+    ready.textContent = `Maestro ready\n${message}`;
+  }
 };
 
 export const setMaestroMarker = (message: string) => {
