@@ -16,7 +16,6 @@ import com.google.android.play.agesignals.model.AgeSignalsStatus;
 
 public class AgeRange {
 
-    public static final String TAG = "AgeRange";
     public static final String ACCESS_NEVER = "never";
     public static final String ACCESS_ALWAYS = "always";
     public static final String ACCESS_WHEN_MANDATORY = "whenMandatory";
@@ -37,23 +36,11 @@ public class AgeRange {
                 requestAccessThenCheck(manager, callback);
                 break;
             case ACCESS_WHEN_MANDATORY:
-                PlayAgeSignalsMandatorySharing.queryMandatorySharing(
+                MandatorySharingProbe.resolve(
                     manager,
-                    new PlayAgeSignalsMandatorySharing.MandatoryCheckCallback() {
-                        @Override
-                        public void onResult(boolean mandatorySharing) {
-                            if (mandatorySharing) {
-                                requestAccessThenCheck(manager, callback);
-                            } else {
-                                checkAgeSignalsOnly(manager, callback);
-                            }
-                        }
-
-                        @Override
-                        public void onFallback() {
-                            checkAgeSignalsOnly(manager, callback);
-                        }
-                    }
+                    () -> requestAccessThenCheck(manager, callback),
+                    () -> checkAgeSignalsOnly(manager, callback),
+                    () -> checkAgeSignalsOnly(manager, callback)
                 );
                 break;
             case ACCESS_NEVER:
@@ -69,7 +56,7 @@ public class AgeRange {
             return accessMode;
         }
         if (!ACCESS_NEVER.equals(accessMode)) {
-            Logger.warn(TAG, "Unknown androidAgeSignalsAccess \"" + accessMode + "\", using \"never\"");
+            Logger.warn(AgeRangePlugin.TAG, "Unknown androidAgeSignalsAccess '" + accessMode + "', using never.");
         }
         return ACCESS_NEVER;
     }
