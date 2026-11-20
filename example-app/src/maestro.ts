@@ -57,6 +57,11 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
   if (typeof document !== 'undefined') {
     document.title = line;
   }
+  const harnessStarting = document.getElementById('maestro-harness-starting');
+  if (harnessStarting) {
+    harnessStarting.textContent = line;
+    harnessStarting.removeAttribute('hidden');
+  }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
