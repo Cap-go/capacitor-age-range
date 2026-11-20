@@ -4,5 +4,5 @@ appId: app.capgo.age.range
     clearState: true
 - extendedWaitUntil:
     visible: 'status=NOT_AVAILABLE'
-    timeout: 120000
+    timeout: 90000
 - assertVisible: 'status=NOT_AVAILABLE'
