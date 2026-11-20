@@ -4,7 +4,14 @@ appId: app.capgo.age.range
     clearState: true
 - extendedWaitUntil:
     visible:
-      id: 'maestro-outcome-default-detail'
+      id: 'maestro-run-default-never'
     timeout: 90000
+- tapOn:
+    id: 'maestro-run-default-never'
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible:
+      id: 'maestro-outcome-default-detail'
+    timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-default-detail'
