@@ -1,8 +1,9 @@
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, CapacitorException } from '@capacitor/core';
 import { AgeRange } from '@capgo/capacitor-age-range';
 import type { AgeRangeResult, RequestAgeRangeOptions } from '@capgo/capacitor-age-range';
 
-const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
+const MAESTRO_PLUGIN_TIMEOUT_MS =
+  import.meta.env.VITE_CAPGO_MAESTRO_CI === 'true' ? 60_000 : 20_000;
 
 type MaestroFlow = 'default' | 'mandatory';
 type MaestroBucket = 'unavailable' | 'error' | 'completed';
@@ -36,10 +37,22 @@ const formatResultLine = (flow: MaestroFlow, status: AgeRangeResult['status']): 
   return `${flowLabel(flow)}: ${kind} status=${status}`;
 };
 
+const pluginErrorCode = (error: unknown): string => {
+  if (error instanceof CapacitorException && error.code) {
+    return error.code;
+  }
+  const wrapped = error as { code?: string; data?: { code?: string } };
+  if (typeof wrapped.code === 'string' && wrapped.code.length > 0) {
+    return wrapped.code;
+  }
+  if (typeof wrapped.data?.code === 'string' && wrapped.data.code.length > 0) {
+    return wrapped.data.code;
+  }
+  return 'PLUGIN_ERROR';
+};
+
 const formatErrorLine = (flow: MaestroFlow, error: unknown): string => {
-  const wrapped = error as { code?: string; message?: string };
-  const code =
-    typeof wrapped.code === 'string' && wrapped.code.length > 0 ? wrapped.code : 'PLUGIN_ERROR';
+  const code = pluginErrorCode(error);
   const message =
     error instanceof Error ? error.message : typeof error === 'string' ? error : String(error);
   return `${flowLabel(flow)}: error code=${code} message=${message}`;
