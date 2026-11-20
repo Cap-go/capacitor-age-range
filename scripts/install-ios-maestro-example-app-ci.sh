@@ -13,8 +13,12 @@ if [ -z "$app_bundle" ]; then
   elif [ -d maestro-artifacts/App.app ]; then
     app_bundle="maestro-artifacts/App.app"
   else
-    app_bundle="$(find maestro-artifacts -maxdepth 3 -type d -name '*.app' 2>/dev/null | head -n 1 || true)"
+    app_bundle="$(find maestro-artifacts -maxdepth 6 -type d -name '*.app' 2>/dev/null | head -n 1 || true)"
   fi
+fi
+
+if [ -z "$app_bundle" ] || [ ! -d "$app_bundle" ]; then
+  app_bundle="$(find . -path './example-app/ios/DerivedData/*' -type d -name 'App.app' 2>/dev/null | head -n 1 || true)"
 fi
 
 if [ -z "$app_bundle" ] || [ ! -d "$app_bundle" ]; then

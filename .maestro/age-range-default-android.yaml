@@ -7,13 +7,18 @@ androidWebViewHierarchy: devtools
     text: 'Wait'
     optional: true
     label: 'Dismiss transient emulator dialogs'
+- scrollUntilVisible:
+    element:
+      text: 'Maestro ready'
+    direction: DOWN
+    timeout: 240000
 - extendedWaitUntil:
     visible: 'Maestro ready'
-    timeout: 240000
+    timeout: 60000
 - tapOn:
     id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible: 'Maestro default never:'
-    timeout: 120000
+    timeout: 300000
 - assertVisible: 'Maestro default never:'
