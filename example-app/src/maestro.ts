@@ -6,9 +6,6 @@ const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 type MaestroFlow = 'default' | 'mandatory';
 type MaestroBucket = 'unavailable' | 'error' | 'completed';
 
-const staticOutcomeId = (flow: MaestroFlow, bucket: MaestroBucket): string =>
-  `maestro-static-${flow}-${bucket}`;
-
 export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => {
