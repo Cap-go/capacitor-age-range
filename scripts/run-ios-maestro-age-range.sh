@@ -24,6 +24,9 @@ if [ "$first_status" -eq 0 ]; then
   exit 0
 fi
 
+echo "--- maestro hierarchy (iOS accessibility tree) ---"
+"$maestro_bin" hierarchy -e "APP_ID=${app_id}" 2>&1 || true
+
 if ! grep -q 'IOSDriverTimeoutException' "$log_file"; then
   exit "$first_status"
 fi

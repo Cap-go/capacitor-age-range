@@ -12,6 +12,7 @@ const requiredIds = [
   'maestro-run-when-mandatory',
   'maestro-outcome-default-detail',
   'maestro-outcome-mandatory-detail',
+  'maestro-ios-a11y-outcome',
   'maestro-marker',
 ];
 

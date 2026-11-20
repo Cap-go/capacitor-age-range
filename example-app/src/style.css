@@ -306,6 +306,13 @@ button:not(:disabled):hover {
   color: var(--accent-strong);
 }
 
+.maestro-a11y-outcome {
+  display: block;
+  margin: 0.25rem 0 0;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
 body.maestro-outcome-default-unavailable #maestro-static-default-unavailable {
   display: block;
 }

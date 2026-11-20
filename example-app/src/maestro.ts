@@ -12,6 +12,8 @@ const DETAIL_OUTCOME_IDS: Record<MaestroFlow, string> = {
   mandatory: 'maestro-outcome-mandatory-detail',
 };
 
+const MAESTRO_IOS_A11Y_OUTCOME_ID = 'maestro-ios-a11y-outcome';
+
 const flowLabel = (flow: MaestroFlow): string =>
   flow === 'default' ? 'Maestro default never' : 'Maestro whenMandatory';
 
@@ -54,13 +56,10 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
     detail.dataset.maestroSettled = 'true';
     detail.removeAttribute('hidden');
   }
-  if (typeof document !== 'undefined') {
-    document.title = line;
-  }
-  const harnessStarting = document.getElementById('maestro-harness-starting');
-  if (harnessStarting) {
-    harnessStarting.textContent = line;
-    harnessStarting.removeAttribute('hidden');
+  const a11yOutcome = document.getElementById(MAESTRO_IOS_A11Y_OUTCOME_ID);
+  if (a11yOutcome) {
+    a11yOutcome.textContent = line;
+    a11yOutcome.setAttribute('aria-label', line);
   }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
