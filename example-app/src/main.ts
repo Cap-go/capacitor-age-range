@@ -205,7 +205,7 @@ if (!isMaestroAutoHarness) {
   void refreshPluginVersion();
 }
 
-  if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
+  if (Capacitor.isNativePlatform() && !isMaestroAutoHarness && !isIosCiUnavailableHarness) {
     CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
       console.error('Capgo notifyAppReady failed', error);
     });
