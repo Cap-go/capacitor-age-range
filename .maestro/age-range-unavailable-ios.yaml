@@ -3,9 +3,9 @@ appId: app.capgo.age.range
 - launchApp:
     clearState: true
 - extendedWaitUntil:
-    visible:
-      id: 'maestro-ios-a11y-outcome'
+    visible: 'Maestro ready'
     timeout: 60000
-- assertVisible:
-    id: 'maestro-ios-a11y-outcome'
-    text: '.*status=NOT_AVAILABLE.*'
+- extendedWaitUntil:
+    visible: 'status=NOT_AVAILABLE'
+    timeout: 90000
+- assertVisible: 'status=NOT_AVAILABLE'

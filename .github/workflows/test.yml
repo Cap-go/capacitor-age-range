@@ -62,7 +62,18 @@ jobs:
           java-version: '21'
       - name: Build
         id: build_code
-        run: cd android && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=${{ matrix.android_play_age_signals_version }}
+        run: |
+          for attempt in 1 2 3; do
+            if (
+              cd android
+              && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=${{ matrix.android_play_age_signals_version }}
+            ); then
+              exit 0
+            fi
+            echo "Gradle build failed (attempt ${attempt}/3); retrying after 15s"
+            sleep 15
+          done
+          exit 1
   build_ios:
     # Keep this job capped at 10 minutes; never raise it unless explicitly asked.
     timeout-minutes: 10

@@ -61,6 +61,9 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
     a11yOutcome.textContent = line;
     a11yOutcome.setAttribute('aria-label', line);
   }
+  if (typeof document !== 'undefined') {
+    document.title = line;
+  }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
