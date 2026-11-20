@@ -1,7 +1,27 @@
 import { Capacitor } from '@capacitor/core';
 import { AgeRange } from '@capgo/capacitor-age-range';
 
+const MAESTRO_PLUGIN_TIMEOUT_MS = 30_000;
+
 const markerEl = () => document.getElementById('maestro-marker') as HTMLElement | null;
+
+const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(`${label} timed out after ${MAESTRO_PLUGIN_TIMEOUT_MS}ms`));
+    }, MAESTRO_PLUGIN_TIMEOUT_MS);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error: unknown) => {
+        clearTimeout(timer);
+        reject(error instanceof Error ? error : new Error(String(error)));
+      },
+    );
+  });
+};
 
 const setMaestroMarker = (message: string) => {
   const el = markerEl();
@@ -24,7 +44,10 @@ export const classifyMaestroOutcome = (status: string | undefined, isError: bool
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
   try {
-    const result = await AgeRange.requestAgeRange({ ageGates: [13, 16, 18] });
+    const result = await withMaestroTimeout(
+      AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
+      'requestAgeRange default',
+    );
     const outcome = classifyMaestroOutcome(result.status, false);
     setMaestroMarker(`Maestro default never: ${outcome} (${result.status})`);
   } catch (error) {
@@ -35,10 +58,13 @@ export const runMaestroDefaultNever = async (): Promise<void> => {
 
 export const runMaestroWhenMandatory = async (): Promise<void> => {
   try {
-    const result = await AgeRange.requestAgeRange({
-      ageGates: [13, 16, 18],
-      androidAgeSignalsAccess: Capacitor.getPlatform() === 'android' ? 'whenMandatory' : undefined,
-    });
+    const result = await withMaestroTimeout(
+      AgeRange.requestAgeRange({
+        ageGates: [13, 16, 18],
+        androidAgeSignalsAccess: Capacitor.getPlatform() === 'android' ? 'whenMandatory' : undefined,
+      }),
+      'requestAgeRange whenMandatory',
+    );
     const outcome = classifyMaestroOutcome(result.status, false);
     setMaestroMarker(`Maestro whenMandatory: ${outcome} (${result.status})`);
   } catch (error) {

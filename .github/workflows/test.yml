@@ -86,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ios-maestro-example-app
-          path: example-app/ios/DerivedData/Build/Products/Debug-iphonesimulator/App.app
+          path: example-app/ios/DerivedData/Build/Products/Debug-iphonesimulator/
           retention-days: 1
           compression-level: 9
   web:
