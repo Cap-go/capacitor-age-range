@@ -11,15 +11,24 @@ import {
   withMaestroTimeout,
 } from './maestro';
 
-const isMaestroAutoHarness =
-  Capacitor.isNativePlatform() &&
-  document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
+const runWhenDomReady = (bootstrap: () => void): void => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+    return;
+  }
+  bootstrap();
+};
 
-if (isMaestroAutoHarness) {
-  setMaestroMarker('Maestro harness: starting');
-}
+const bootstrap = (): void => {
+  const isMaestroAutoHarness =
+    Capacitor.isNativePlatform() &&
+    document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
 
-const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
+  if (isMaestroAutoHarness) {
+    setMaestroMarker('Maestro harness: starting');
+  }
+
+  const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
 const statusChipEl = document.getElementById('status-chip') as HTMLElement;
 const ageGatesInput = document.getElementById('age-gates') as HTMLInputElement;
 const requestButton = document.getElementById('request-age-range') as HTMLButtonElement;
@@ -208,8 +217,11 @@ if (Capacitor.isNativePlatform()) {
   void runNativeMaestroHarness();
 }
 
-if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
-  CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
-    console.error('Capgo notifyAppReady failed', error);
-  });
-}
+  if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
+    CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
+      console.error('Capgo notifyAppReady failed', error);
+    });
+  }
+};
+
+runWhenDomReady(bootstrap);
