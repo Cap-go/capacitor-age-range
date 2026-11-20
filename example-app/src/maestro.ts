@@ -58,8 +58,10 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
   }
   const a11yOutcome = document.getElementById(MAESTRO_IOS_A11Y_OUTCOME_ID);
   if (a11yOutcome) {
-    a11yOutcome.textContent = line;
-    a11yOutcome.setAttribute('aria-label', line);
+    const statusMatch = line.match(/status=[A-Z_]+/);
+    const statusToken = statusMatch?.[0] ?? line;
+    a11yOutcome.textContent = statusToken;
+    a11yOutcome.setAttribute('aria-label', statusToken);
   }
   if (typeof document !== 'undefined') {
     document.title = line;

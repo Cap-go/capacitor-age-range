@@ -64,10 +64,7 @@ jobs:
         id: build_code
         run: |
           for attempt in 1 2 3; do
-            if (
-              cd android
-              && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=${{ matrix.android_play_age_signals_version }}
-            ); then
+            if (cd android && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=${{ matrix.android_play_age_signals_version }}); then
               exit 0
             fi
             echo "Gradle build failed (attempt ${attempt}/3); retrying after 15s"
