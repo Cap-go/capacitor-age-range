@@ -5,10 +5,10 @@ import type { AgeRangeResult } from '@capgo/capacitor-age-range';
 
 import './style.css';
 import {
+  runMaestroAutoHarness,
   runMaestroDefaultNever,
   runMaestroWhenMandatory,
   setMaestroHarnessStatus,
-  withMaestroTimeout,
 } from './maestro';
 
 const runWhenDomReady = (bootstrap: () => void): void => {
@@ -24,6 +24,7 @@ const bootstrap = (): void => {
 
   if (isMaestroAutoHarness) {
     setMaestroHarnessStatus('Maestro harness: starting');
+    void runMaestroAutoHarness();
   }
 
   const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
@@ -169,15 +170,15 @@ const requestAgeRange = async () => {
   }
 };
 
-requestButton.addEventListener('click', () => {
+requestButton?.addEventListener('click', () => {
   void requestAgeRange();
 });
 
-versionButton.addEventListener('click', () => {
+versionButton?.addEventListener('click', () => {
   void refreshPluginVersion();
 });
 
-clearJsonButton.addEventListener('click', () => {
+clearJsonButton?.addEventListener('click', () => {
   setJson(undefined);
 });
 
@@ -195,25 +196,6 @@ maestroMandatoryButton?.addEventListener('click', () => {
 if (!isMaestroAutoHarness) {
   void refreshPluginVersion();
 }
-
-const runNativeMaestroHarness = async () => {
-  if (!isMaestroAutoHarness) {
-    return;
-  }
-  try {
-    await withMaestroTimeout(refreshPluginVersion(), 'getPluginVersion');
-  } catch {
-    pluginVersionEl.textContent = 'timeout';
-  }
-  await runMaestroDefaultNever();
-  if (Capacitor.getPlatform() === 'android') {
-    await runMaestroWhenMandatory();
-  }
-};
-
-  if (isMaestroAutoHarness) {
-    void runNativeMaestroHarness();
-  }
 
   if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
     CapacitorUpdater.notifyAppReady().catch((error: unknown) => {

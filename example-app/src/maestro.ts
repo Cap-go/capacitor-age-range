@@ -28,13 +28,11 @@ export const setMaestroHarnessStatus = (message: string) => {
   if (harnessLine) {
     harnessLine.textContent = message;
   }
-  if (message.startsWith('Maestro default never:') || message.startsWith('Maestro whenMandatory:')) {
-    const ready = document.getElementById('maestro-ready');
-    if (ready) {
-      ready.textContent = message;
-    }
-    document.title = message;
+  const ready = document.getElementById('maestro-ready');
+  if (ready) {
+    ready.textContent = message;
   }
+  document.title = message;
 };
 
 export const setMaestroMarker = (message: string) => {
@@ -84,5 +82,12 @@ export const runMaestroWhenMandatory = async (): Promise<void> => {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     setMaestroMarker(`Maestro whenMandatory: error (${message})`);
+  }
+};
+
+export const runMaestroAutoHarness = async (): Promise<void> => {
+  await runMaestroDefaultNever();
+  if (Capacitor.getPlatform() === 'android') {
+    await runMaestroWhenMandatory();
   }
 };
