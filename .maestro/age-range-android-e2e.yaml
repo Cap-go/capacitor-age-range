@@ -15,9 +15,6 @@ androidWebViewHierarchy: devtools
 - assertVisible:
     id: 'maestro-ready'
 - extendedWaitUntil:
-    visible: 'Maestro harness: starting'
-    timeout: 120000
-- extendedWaitUntil:
     visible: 'Maestro default never:'
     timeout: 180000
 - assertVisible: 'Maestro default never:'
