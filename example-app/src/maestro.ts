@@ -85,11 +85,13 @@ export const setMaestroHarnessStatus = (message: string) => {
 export const publishMaestroPluginOutcome = (flow: MaestroFlow, result: AgeRangeResult): void => {
   const bucket = bucketForStatus(result.status);
   const line = formatResultLine(flow, result.status);
+  document.body.dataset[`maestro${flow === 'default' ? 'Default' : 'Mandatory'}Status`] = result.status;
   publishOutcomeLine(flow, bucket, line);
 };
 
 export const publishMaestroPluginError = (flow: MaestroFlow, error: unknown): void => {
   const line = formatErrorLine(flow, error);
+  document.body.dataset[`maestro${flow === 'default' ? 'Default' : 'Mandatory'}Status`] = 'ERROR';
   publishOutcomeLine(flow, 'error', line);
 };
 
