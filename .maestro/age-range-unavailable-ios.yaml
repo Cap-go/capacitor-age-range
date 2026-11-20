@@ -3,6 +3,12 @@ appId: app.capgo.age.range
 - launchApp:
     clearState: true
 - extendedWaitUntil:
+<<<<<<< HEAD
     visible: 'unavailable status=NOT_AVAILABLE'
     timeout: 120000
+=======
+    visible: 'Maestro default never:'
+    timeout: 90000
+- assertVisible: 'Maestro default never:'
+>>>>>>> fe4ca50 (fix(maestro): drop brittle Maestro ready wait on iOS CI)
 - assertVisible: 'status=NOT_AVAILABLE'
