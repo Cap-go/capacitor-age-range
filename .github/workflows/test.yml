@@ -159,7 +159,7 @@ jobs:
           profile: pixel_7
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          script: sh ./scripts/run-android-maestro-with-retry.sh maestro:test:android:e2e
+          script: timeout 7m bun run maestro:test:android:e2e
 
   maestro_ios_unavailable:
     needs: [build_ios]

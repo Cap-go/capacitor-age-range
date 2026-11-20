@@ -3,7 +3,11 @@ import { AgeRange } from '@capgo/capacitor-age-range';
 
 const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 
-const markerEl = () => document.getElementById('maestro-marker') as HTMLElement | null;
+type MaestroFlow = 'default' | 'mandatory';
+type MaestroBucket = 'unavailable' | 'error' | 'completed';
+
+const staticOutcomeId = (flow: MaestroFlow, bucket: MaestroBucket): string =>
+  `maestro-static-${flow}-${bucket}`;
 
 export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
@@ -24,27 +28,13 @@ export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promi
 };
 
 export const setMaestroHarnessStatus = (message: string) => {
-  const harnessLine = document.getElementById('maestro-harness-line');
-  if (harnessLine) {
-    harnessLine.textContent = message;
-  }
-  const ready = document.getElementById('maestro-ready');
-  if (ready) {
-    ready.textContent = message;
-  }
-  document.title = message;
-};
-
-export const setMaestroMarker = (message: string) => {
-  const el = markerEl();
-  setMaestroHarnessStatus(message);
-  if (el) {
-    el.removeAttribute('hidden');
-    el.textContent = message;
+  if (message === 'Maestro harness: starting') {
+    document.getElementById('maestro-harness-boot')?.setAttribute('hidden', '');
+    document.getElementById('maestro-harness-starting')?.removeAttribute('hidden');
   }
 };
 
-export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): string => {
+export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): MaestroBucket => {
   if (isError) {
     return 'error';
   }
@@ -54,17 +44,19 @@ export const classifyMaestroOutcome = (status: string | undefined, isError: bool
   return 'completed';
 };
 
+export const revealMaestroStaticOutcome = (flow: MaestroFlow, bucket: MaestroBucket) => {
+  document.getElementById(staticOutcomeId(flow, bucket))?.removeAttribute('hidden');
+};
+
 export const runMaestroDefaultNever = async (): Promise<void> => {
   try {
     const result = await withMaestroTimeout(
       AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
       'requestAgeRange default never',
     );
-    const outcome = classifyMaestroOutcome(result.status, false);
-    setMaestroMarker(`Maestro default never: ${outcome} (${result.status})`);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    setMaestroMarker(`Maestro default never: error (${message})`);
+    revealMaestroStaticOutcome('default', classifyMaestroOutcome(result.status, false));
+  } catch {
+    revealMaestroStaticOutcome('default', 'error');
   }
 };
 
@@ -77,11 +69,9 @@ export const runMaestroWhenMandatory = async (): Promise<void> => {
       }),
       'requestAgeRange whenMandatory',
     );
-    const outcome = classifyMaestroOutcome(result.status, false);
-    setMaestroMarker(`Maestro whenMandatory: ${outcome} (${result.status})`);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error);
-    setMaestroMarker(`Maestro whenMandatory: error (${message})`);
+    revealMaestroStaticOutcome('mandatory', classifyMaestroOutcome(result.status, false));
+  } catch {
+    revealMaestroStaticOutcome('mandatory', 'error');
   }
 };
 
