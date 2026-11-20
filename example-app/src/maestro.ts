@@ -54,6 +54,10 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
     detail.dataset.maestroSettled = 'true';
     detail.removeAttribute('hidden');
   }
+  const readyBanner = document.getElementById('maestro-ready');
+  if (readyBanner) {
+    readyBanner.textContent = line;
+  }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
