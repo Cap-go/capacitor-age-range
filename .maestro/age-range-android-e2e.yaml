@@ -9,17 +9,25 @@ androidWebViewHierarchy: devtools
     label: 'Dismiss transient emulator dialogs'
 - assertVisible:
     id: 'maestro-ready'
+- extendedWaitUntil:
+    visible:
+      id: 'maestro-run-default-never'
+    timeout: 60000
 - tapOn:
     id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible: 'Maestro default never:'
+    visible:
+      id: 'maestro-static-default-unavailable'
     timeout: 60000
-- assertVisible: 'Maestro default never:'
+- assertVisible:
+    id: 'maestro-static-default-unavailable'
 - tapOn:
     id: 'maestro-run-when-mandatory'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible: 'Maestro whenMandatory:'
+    visible:
+      id: 'maestro-static-mandatory-unavailable'
     timeout: 60000
-- assertVisible: 'Maestro whenMandatory:'
+- assertVisible:
+    id: 'maestro-static-mandatory-unavailable'
