@@ -22,12 +22,9 @@ public class AgeRangePlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
 
-        let maestroCiUnavailable = call.getBool("maestroCiUnavailable") ?? false
-
         implementation.requestAgeRange(
             ageGates: ageGates,
-            viewController: viewController,
-            maestroCiUnavailable: maestroCiUnavailable
+            viewController: viewController
         ) { result in
             call.resolve(result)
         }

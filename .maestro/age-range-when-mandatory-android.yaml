@@ -23,4 +23,5 @@ androidWebViewHierarchy: devtools
     timeout: 300000
 - assertVisible:
     id: maestro-outcome-mandatory-detail
-- assertVisible: 'Maestro whenMandatory:'
+- assertVisible:
+    text: '.*status=NOT_AVAILABLE.*'

@@ -22,11 +22,11 @@ const runWhenDomReady = (bootstrap: () => void): void => {
 const bootstrap = (): void => {
   const maestroMarker = document.getElementById('maestro-marker');
   const isMaestroAutoHarness = maestroMarker?.getAttribute('data-auto') === 'true';
-  const isIosCiUnavailableHarness =
+  const isIosCiMaestroHarness =
     Capacitor.getPlatform() === 'ios' &&
-    maestroMarker?.getAttribute('data-ios-ci-unavailable') === 'true';
+    maestroMarker?.getAttribute('data-ios-ci-maestro') === 'true';
 
-  if (isIosCiUnavailableHarness && !isMaestroAutoHarness) {
+  if (isIosCiMaestroHarness && !isMaestroAutoHarness) {
     void runMaestroDefaultNever();
   }
 

@@ -4,7 +4,7 @@ appId: app.capgo.age.range
     clearState: true
 - extendedWaitUntil:
     visible:
-      text: '.*status=NOT_AVAILABLE.*'
+      text: '.*status=(NOT_AVAILABLE|ERROR).*'
     timeout: 60000
 - assertVisible:
-    text: '.*status=NOT_AVAILABLE.*'
+    text: '.*status=(NOT_AVAILABLE|ERROR).*'

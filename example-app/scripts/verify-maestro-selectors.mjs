@@ -33,8 +33,8 @@ if (!/publishMaestroPluginOutcome\(\s*['"]default['"]/s.test(maestroSource)) {
   process.exit(1);
 }
 
-if (!/maestroCiUnavailable:\s*true/.test(maestroSource)) {
-  console.error('Maestro harness must pass maestroCiUnavailable on iOS CI');
+if (/maestroCiUnavailable/.test(maestroSource)) {
+  console.error('Maestro harness must not reference plugin maestroCiUnavailable bypass');
   process.exit(1);
 }
 

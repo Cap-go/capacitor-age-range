@@ -7,20 +7,11 @@ import DeclaredAgeRange
 
 class AgeRangeImpl {
 
-    private func shouldUseMaestroCiUnavailablePath() -> Bool {
-        (Bundle.main.object(forInfoDictionaryKey: "CapgoMaestroCiUnavailable") as? Bool) == true
-    }
-
     func requestAgeRange(
         ageGates: [Int],
         viewController: UIViewController,
-        maestroCiUnavailable: Bool,
         completion: @escaping ([String: Any]) -> Void
     ) {
-        if maestroCiUnavailable || shouldUseMaestroCiUnavailablePath() {
-            completion(["status": "NOT_AVAILABLE"])
-            return
-        }
         #if canImport(DeclaredAgeRange)
         if #available(iOS 26, *) {
             requestAgeRangeImpl(ageGates: ageGates, viewController: viewController, completion: completion)

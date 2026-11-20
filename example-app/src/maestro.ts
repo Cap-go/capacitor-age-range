@@ -59,24 +59,16 @@ const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: stri
   const a11yOutcome = document.getElementById(MAESTRO_IOS_A11Y_OUTCOME_ID);
   if (a11yOutcome) {
     const statusMatch = line.match(/status=[A-Z_]+/);
-    const statusToken = statusMatch?.[0] ?? line;
+    const codeMatch = line.match(/code=[A-Z_0-9]+/);
+    const statusToken = statusMatch?.[0] ?? codeMatch?.[0] ?? line;
     a11yOutcome.textContent = statusToken;
     a11yOutcome.setAttribute('aria-label', statusToken);
-  }
-  if (typeof document !== 'undefined') {
-    document.title = line;
   }
   document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
-const isMaestroCiUnavailableRequest = (): boolean =>
-  document.getElementById('maestro-marker')?.getAttribute('data-ios-ci-unavailable') === 'true';
-
 const defaultNeverOptions = (): RequestAgeRangeOptions => ({
   ageGates: [13, 16, 18],
-  ...(Capacitor.getPlatform() === 'ios' && isMaestroCiUnavailableRequest()
-    ? { maestroCiUnavailable: true }
-    : {}),
 });
 
 export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
