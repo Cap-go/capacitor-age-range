@@ -26,6 +26,10 @@ const bootstrap = (): void => {
     Capacitor.getPlatform() === 'ios' &&
     maestroMarker?.getAttribute('data-ios-ci-unavailable') === 'true';
 
+  if (isIosCiUnavailableHarness && !isMaestroAutoHarness) {
+    void runMaestroDefaultNever();
+  }
+
   if (isMaestroAutoHarness) {
     setMaestroHarnessStatus('Maestro harness: starting');
     void runMaestroAutoHarness();
@@ -196,10 +200,6 @@ maestroDefaultButton?.addEventListener('click', () => {
 maestroMandatoryButton?.addEventListener('click', () => {
   void runMaestroWhenMandatory();
 });
-
-if (isIosCiUnavailableHarness && !isMaestroAutoHarness) {
-  void runMaestroDefaultNever();
-}
 
 if (!isMaestroAutoHarness) {
   void refreshPluginVersion();
