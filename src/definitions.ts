@@ -65,7 +65,7 @@ export interface RequestAgeRangeOptions {
    *
    * - `never` (default): calls `checkAgeSignals()` only, matching pre-0.0.4 behavior with no in-app sharing prompt.
    * - `always`: always requests access first (Google may show the sharing prompt when applicable).
-   * - `whenMandatory`: requests access only when `getApplicableAgeFeatures()` reports `MANDATORY_SHARING`.
+   * - `whenMandatory`: requests access only when `getApplicableAgeFeatures()` reports `MANDATORY_SHARING` (Play Age Signals 0.0.6+ at runtime; on 0.0.4 to 0.0.5 falls back to `never`).
    *
    * @default 'never'
    * @since 8.3.0
