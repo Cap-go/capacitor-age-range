@@ -25,11 +25,14 @@ export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promi
 
 export const setMaestroMarker = (message: string) => {
   const el = markerEl();
-  if (!el) {
-    return;
+  const ready = document.getElementById('maestro-ready');
+  if (ready) {
+    ready.textContent = message;
   }
-  el.removeAttribute('hidden');
-  el.textContent = message;
+  if (el) {
+    el.removeAttribute('hidden');
+    el.textContent = message;
+  }
   document.title = message;
 };
 
