@@ -296,6 +296,16 @@ button:not(:disabled):hover {
   display: none;
 }
 
+.maestro-outcome-detail[hidden] {
+  display: none !important;
+}
+
+.maestro-outcome-detail:not([hidden]) {
+  display: block;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
 body.maestro-outcome-default-unavailable #maestro-static-default-unavailable {
   display: block;
 }

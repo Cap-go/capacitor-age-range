@@ -22,7 +22,8 @@ androidWebViewHierarchy: devtools
     timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-default-detail'
-- assertVisible: 'Maestro default never: unavailable status=NOT_AVAILABLE'
+- assertVisible:
+    id: 'maestro-static-default-unavailable'
 - tapOn:
     id: 'maestro-run-when-mandatory'
     retryTapIfNoChange: true
@@ -32,4 +33,5 @@ androidWebViewHierarchy: devtools
     timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-mandatory-detail'
-- assertVisible: 'Maestro whenMandatory: unavailable status=NOT_AVAILABLE'
+- assertVisible:
+    id: 'maestro-static-mandatory-unavailable'

@@ -32,5 +32,18 @@ if (!/publishMaestroPluginOutcome\(\s*['"]default['"]/s.test(maestroSource)) {
   process.exit(1);
 }
 
+if (!/status=\$\{status\}/.test(maestroSource)) {
+  console.error('Maestro harness must encode plugin status in outcome lines');
+  process.exit(1);
+}
+
+if (/publishMaestroPluginOutcome[\s\S]*?await[\s\S]*?AgeRange\.requestAgeRange/.test(maestroSource) === false) {
+  const defaultBlock = maestroSource.match(/runMaestroDefaultNever[\s\S]*?^};/m)?.[0] ?? '';
+  if (!/await[\s\S]*AgeRange\.requestAgeRange/.test(defaultBlock)) {
+    console.error('Maestro harness must await AgeRange.requestAgeRange before publishing');
+    process.exit(1);
+  }
+}
+
 console.log('Maestro selectors OK:', requiredIds.join(', '));
 console.log('Maestro harness outcome wiring OK');
