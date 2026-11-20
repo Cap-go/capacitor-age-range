@@ -35,6 +35,11 @@ jobs:
     # Keep this job capped at 10 minutes; never raise it unless explicitly asked.
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        android_play_age_signals_version: ['0.0.4', '0.0.6']
+    name: build_android (Play Age Signals ${{ matrix.android_play_age_signals_version }})
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -57,7 +62,7 @@ jobs:
           java-version: '21'
       - name: Build
         id: build_code
-        run: bun run verify:android
+        run: cd android && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=${{ matrix.android_play_age_signals_version }}
   build_ios:
     # Keep this job capped at 10 minutes; never raise it unless explicitly asked.
     timeout-minutes: 10

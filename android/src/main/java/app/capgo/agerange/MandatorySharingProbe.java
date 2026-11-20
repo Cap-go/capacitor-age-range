@@ -45,8 +45,11 @@ final class MandatorySharingProbe {
                     } else {
                         onNotMandatory.run();
                     }
-                } catch (ReflectiveOperationException reflectiveOperationException) {
-                    Logger.warn(AgeRangePlugin.TAG, "Could not read applicable age features, using checkAgeSignals only");
+                } catch (ReflectiveOperationException | RuntimeException exception) {
+                    Logger.warn(
+                        AgeRangePlugin.TAG,
+                        "Could not read applicable age features, using checkAgeSignals only: " + exception.getMessage()
+                    );
                     onUnavailable.run();
                 }
             });
