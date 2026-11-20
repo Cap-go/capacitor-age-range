@@ -20,7 +20,11 @@ const runWhenDomReady = (bootstrap: () => void): void => {
 };
 
 const bootstrap = (): void => {
-  const isMaestroAutoHarness = document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
+  const maestroMarker = document.getElementById('maestro-marker');
+  const isMaestroAutoHarness = maestroMarker?.getAttribute('data-auto') === 'true';
+  const isIosCiUnavailableHarness =
+    Capacitor.getPlatform() === 'ios' &&
+    maestroMarker?.getAttribute('data-ios-ci-unavailable') === 'true';
 
   if (isMaestroAutoHarness) {
     setMaestroHarnessStatus('Maestro harness: starting');
@@ -192,6 +196,10 @@ maestroDefaultButton?.addEventListener('click', () => {
 maestroMandatoryButton?.addEventListener('click', () => {
   void runMaestroWhenMandatory();
 });
+
+if (isIosCiUnavailableHarness && !isMaestroAutoHarness) {
+  void runMaestroDefaultNever();
+}
 
 if (!isMaestroAutoHarness) {
   void refreshPluginVersion();
