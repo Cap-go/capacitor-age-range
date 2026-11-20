@@ -4,6 +4,7 @@ import { AgeRange } from '@capgo/capacitor-age-range';
 import type { AgeRangeResult } from '@capgo/capacitor-age-range';
 
 import './style.css';
+import { runMaestroDefaultNever, runMaestroWhenMandatory } from './maestro';
 
 const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
 const statusChipEl = document.getElementById('status-chip') as HTMLElement;
@@ -158,6 +159,17 @@ versionButton.addEventListener('click', () => {
 
 clearJsonButton.addEventListener('click', () => {
   setJson(undefined);
+});
+
+const maestroDefaultButton = document.getElementById('maestro-run-default-never') as HTMLButtonElement;
+const maestroMandatoryButton = document.getElementById('maestro-run-when-mandatory') as HTMLButtonElement;
+
+maestroDefaultButton.addEventListener('click', () => {
+  void runMaestroDefaultNever();
+});
+
+maestroMandatoryButton.addEventListener('click', () => {
+  void runMaestroWhenMandatory();
 });
 
 void refreshPluginVersion();

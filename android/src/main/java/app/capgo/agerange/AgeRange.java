@@ -5,18 +5,18 @@ import androidx.annotation.Nullable;
 import app.capgo.agerange.classes.CustomExceptions;
 import app.capgo.agerange.classes.results.RequestAgeRangeResult;
 import app.capgo.agerange.interfaces.NonEmptyResultCallback;
+import com.getcapacitor.Logger;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.agesignals.AgeSignalsAccessRequest;
 import com.google.android.play.agesignals.AgeSignalsManager;
 import com.google.android.play.agesignals.AgeSignalsManagerFactory;
 import com.google.android.play.agesignals.AgeSignalsRequest;
 import com.google.android.play.agesignals.AgeSignalsResult;
-import com.google.android.play.agesignals.ApplicableAgeFeaturesRequest;
 import com.google.android.play.agesignals.model.AgeSignalsStatus;
-import com.google.android.play.agesignals.model.ApplicableAgeFeature;
 
 public class AgeRange {
 
+    public static final String TAG = "AgeRange";
     public static final String ACCESS_NEVER = "never";
     public static final String ACCESS_ALWAYS = "always";
     public static final String ACCESS_WHEN_MANDATORY = "whenMandatory";
@@ -37,17 +37,24 @@ public class AgeRange {
                 requestAccessThenCheck(manager, callback);
                 break;
             case ACCESS_WHEN_MANDATORY:
-                manager
-                    .getApplicableAgeFeatures(ApplicableAgeFeaturesRequest.builder().build())
-                    .addOnSuccessListener((featuresResult) -> {
-                        boolean mandatory = featuresResult.features().contains(ApplicableAgeFeature.MANDATORY_SHARING);
-                        if (mandatory) {
-                            requestAccessThenCheck(manager, callback);
-                        } else {
+                PlayAgeSignalsMandatorySharing.queryMandatorySharing(
+                    manager,
+                    new PlayAgeSignalsMandatorySharing.MandatoryCheckCallback() {
+                        @Override
+                        public void onResult(boolean mandatorySharing) {
+                            if (mandatorySharing) {
+                                requestAccessThenCheck(manager, callback);
+                            } else {
+                                checkAgeSignalsOnly(manager, callback);
+                            }
+                        }
+
+                        @Override
+                        public void onFallback() {
                             checkAgeSignalsOnly(manager, callback);
                         }
-                    })
-                    .addOnFailureListener((exception) -> callback.error(mapErrorToException(exception)));
+                    }
+                );
                 break;
             case ACCESS_NEVER:
             default:
@@ -57,9 +64,12 @@ public class AgeRange {
     }
 
     @NonNull
-    private String normalizeAccessMode(@NonNull String accessMode) {
+    static String normalizeAccessMode(@NonNull String accessMode) {
         if (ACCESS_ALWAYS.equals(accessMode) || ACCESS_WHEN_MANDATORY.equals(accessMode)) {
             return accessMode;
+        }
+        if (!ACCESS_NEVER.equals(accessMode)) {
+            Logger.warn(TAG, "Unknown androidAgeSignalsAccess \"" + accessMode + "\", using \"never\"");
         }
         return ACCESS_NEVER;
     }

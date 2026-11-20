@@ -1,0 +1,18 @@
+appId: app.capgo.age.range
+androidWebViewHierarchy: devtools
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: 'Wait'
+    optional: true
+- extendedWaitUntil:
+    visible: 'Maestro ready'
+    timeout: 240000
+- tapOn:
+    id: 'maestro-run-when-mandatory'
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible: 'Maestro whenMandatory:'
+    timeout: 120000
+- assertVisible: 'Maestro whenMandatory:'
