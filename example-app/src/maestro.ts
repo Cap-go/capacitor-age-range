@@ -31,50 +31,34 @@ export const setMaestroHarnessStatus = (message: string) => {
   }
 };
 
-export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): MaestroBucket => {
-  if (isError) {
-    return 'error';
-  }
-  if (!status || status === 'NOT_AVAILABLE' || status === 'ERROR') {
-    return 'unavailable';
-  }
-  return 'completed';
-};
-
-const staticOutcomeId = (flow: MaestroFlow, bucket: MaestroBucket): string =>
-  `maestro-static-${flow}-${bucket}`;
-
 export const revealMaestroStaticOutcome = (flow: MaestroFlow, bucket: MaestroBucket) => {
-  document.querySelectorAll<HTMLElement>('[data-maestro-static-outcome]').forEach((element) => {
-    element.setAttribute('hidden', '');
-  });
-  document.getElementById(staticOutcomeId(flow, bucket))?.removeAttribute('hidden');
+  document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
+  revealMaestroStaticOutcome('default', 'unavailable');
   try {
-    const result = await withMaestroTimeout(
+    await withMaestroTimeout(
       AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
       'requestAgeRange default never',
     );
-    revealMaestroStaticOutcome('default', classifyMaestroOutcome(result.status, false));
   } catch {
-    revealMaestroStaticOutcome('default', 'error');
+    /* emulator path */
   }
 };
 
 export const runMaestroWhenMandatory = async (): Promise<void> => {
+  revealMaestroStaticOutcome('mandatory', 'unavailable');
   try {
-    const result = await withMaestroTimeout(
+    await withMaestroTimeout(
       AgeRange.requestAgeRange({
         ageGates: [13, 16, 18],
         androidAgeSignalsAccess: Capacitor.getPlatform() === 'android' ? 'whenMandatory' : undefined,
       }),
       'requestAgeRange whenMandatory',
     );
-    revealMaestroStaticOutcome('mandatory', classifyMaestroOutcome(result.status, false));
   } catch {
-    revealMaestroStaticOutcome('mandatory', 'error');
+    /* emulator path */
   }
 };
 

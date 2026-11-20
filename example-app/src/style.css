@@ -292,6 +292,34 @@ button:not(:disabled):hover {
   color: var(--accent-strong);
 }
 
+.maestro-static-outcome {
+  display: none;
+}
+
+body.maestro-outcome-default-unavailable #maestro-static-default-unavailable {
+  display: block;
+}
+
+body.maestro-outcome-default-error #maestro-static-default-error {
+  display: block;
+}
+
+body.maestro-outcome-default-completed #maestro-static-default-completed {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-unavailable #maestro-static-mandatory-unavailable {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-error #maestro-static-mandatory-error {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-completed #maestro-static-mandatory-completed {
+  display: block;
+}
+
 .maestro-actions {
   margin-top: 0.5rem;
 }
