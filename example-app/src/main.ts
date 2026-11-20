@@ -4,7 +4,12 @@ import { AgeRange } from '@capgo/capacitor-age-range';
 import type { AgeRangeResult } from '@capgo/capacitor-age-range';
 
 import './style.css';
-import { runMaestroDefaultNever, runMaestroWhenMandatory } from './maestro';
+import {
+  runMaestroDefaultNever,
+  runMaestroWhenMandatory,
+  setMaestroMarker,
+  withMaestroTimeout,
+} from './maestro';
 
 const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
 const statusChipEl = document.getElementById('status-chip') as HTMLElement;
@@ -179,7 +184,12 @@ const runNativeMaestroHarness = async () => {
   if (!marker || marker.dataset.auto !== 'true') {
     return;
   }
-  await refreshPluginVersion();
+  setMaestroMarker('Maestro harness: starting');
+  try {
+    await withMaestroTimeout(refreshPluginVersion(), 'getPluginVersion');
+  } catch {
+    pluginVersionEl.textContent = 'timeout';
+  }
   await runMaestroDefaultNever();
   if (Capacitor.getPlatform() === 'android') {
     await runMaestroWhenMandatory();

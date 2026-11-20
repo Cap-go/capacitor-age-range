@@ -5,7 +5,7 @@ const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 
 const markerEl = () => document.getElementById('maestro-marker') as HTMLElement | null;
 
-const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
+export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => {
       reject(new Error(`${label} timed out after ${MAESTRO_PLUGIN_TIMEOUT_MS}ms`));
@@ -23,13 +23,14 @@ const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> =
   });
 };
 
-const setMaestroMarker = (message: string) => {
+export const setMaestroMarker = (message: string) => {
   const el = markerEl();
   if (!el) {
     return;
   }
-  el.hidden = false;
+  el.removeAttribute('hidden');
   el.textContent = message;
+  document.title = message;
 };
 
 export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): string => {
