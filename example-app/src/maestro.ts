@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { AgeRange } from '@capgo/capacitor-age-range';
 
-const MAESTRO_PLUGIN_TIMEOUT_MS = 90_000;
+const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 
 const markerEl = () => document.getElementById('maestro-marker') as HTMLElement | null;
 

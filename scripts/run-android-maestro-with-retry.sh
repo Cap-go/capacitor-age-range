@@ -6,7 +6,7 @@ script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 maestro_script="${1:?missing bun script name}"
 
 set +e
-timeout 10m bun run "$maestro_script"
+timeout 8m bun run "$maestro_script"
 first_status=$?
 set -e
 
@@ -17,4 +17,4 @@ fi
 echo "Maestro Android run failed (exit $first_status). Retrying once..."
 timeout 30s adb wait-for-device
 sh "$script_dir/wait-android-system-ready.sh"
-timeout 10m bun run "$maestro_script"
+timeout 8m bun run "$maestro_script"

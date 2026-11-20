@@ -121,11 +121,11 @@ jobs:
         id: verify_code
         run: bun run verify:web
 
-  maestro_android_default_never:
+  maestro_android_e2e:
     # Keep this job capped at 10 minutes; never raise it unless explicitly asked.
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    name: Android Maestro default (never)
+    name: Android Maestro e2e
     steps:
       - name: Check out
         uses: actions/checkout@v6
@@ -149,7 +149,7 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Run Maestro default never (Android)
+      - name: Run Maestro e2e (Android)
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -157,45 +157,7 @@ jobs:
           profile: pixel_7
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          script: sh ./scripts/run-android-maestro-with-retry.sh maestro:test:android:default-never
-
-  maestro_android_when_mandatory:
-    # Keep this job capped at 10 minutes; never raise it unless explicitly asked.
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    name: Android Maestro whenMandatory
-    steps:
-      - name: Check out
-        uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v2
-      - name: Install root dependencies
-        run: bun i
-      - name: Setup java
-        uses: actions/setup-java@v5
-        with:
-          distribution: zulu
-          java-version: '21'
-      - name: Install Maestro CLI
-        run: |
-          export MAESTRO_VERSION=1.39.0
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
-      - name: Build example app for Android
-        run: bun run example-app:prepare:android
-      - name: Enable KVM group perms
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-      - name: Run Maestro whenMandatory (Android)
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: 34
-          arch: x86_64
-          profile: pixel_7
-          disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
-          script: sh ./scripts/run-android-maestro-with-retry.sh maestro:test:android:when-mandatory
+          script: sh ./scripts/run-android-maestro-with-retry.sh maestro:test:android:e2e
 
   maestro_ios_unavailable:
     needs: [build_ios]
