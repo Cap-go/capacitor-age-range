@@ -5,3 +5,5 @@ dist/
 .vscode/
 *.map
 .sourcemaps
+android/
+ios/

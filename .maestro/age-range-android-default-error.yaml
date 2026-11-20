@@ -1,0 +1,31 @@
+appId: app.capgo.age.range
+androidWebViewHierarchy: devtools
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: 'Wait'
+    optional: true
+    label: 'Dismiss transient emulator dialogs'
+- assertVisible:
+    id: 'maestro-ready'
+- extendedWaitUntil:
+    visible:
+      id: 'maestro-run-default-never'
+    timeout: 60000
+- tapOn:
+    id: 'maestro-run-default-never'
+    retryTapIfNoChange: true
+- extendedWaitUntil:
+    visible:
+      id: 'maestro-outcome-default-detail'
+    timeout: 90000
+- assertVisible:
+    id: 'maestro-outcome-default-detail'
+- assertNotVisible:
+    text: '.*UNIMPLEMENTED.*'
+- assertNotVisible:
+    text: '.*Maestro default never:.*status=pending.*'
+- assertVisible:
+    id: 'maestro-outcome-default-detail'
+    text: '.*Maestro default never: .*(error code=API_NOT_AVAILABLE|unavailable status=NOT_AVAILABLE|completed status=DECLINED_SHARING).*'

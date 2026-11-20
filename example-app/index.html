@@ -8,10 +8,110 @@
     />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
-    <title>@capgo/capacitor-age-range</title>
+    <title>Maestro ready</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <div id="maestro-status" class="maestro-status" aria-live="polite">
+      <div
+        id="maestro-ready"
+        class="maestro-ready"
+        role="status"
+        aria-label="maestro-ready"
+      >
+        Maestro ready
+      </div>
+      <p
+        id="maestro-ios-a11y-outcome"
+        class="maestro-a11y-outcome"
+        role="status"
+        aria-live="assertive"
+        aria-label="Maestro harness waiting"
+      >
+        Maestro harness waiting
+      </p>
+      <p id="maestro-harness-boot" class="maestro-ready">Maestro harness: boot</p>
+      <p id="maestro-harness-starting" class="maestro-ready" hidden>Maestro harness: starting</p>
+      <p
+        id="maestro-outcome-default-detail"
+        class="maestro-marker maestro-outcome-detail"
+        data-maestro-settled=""
+        hidden
+      ></p>
+      <p
+        id="maestro-outcome-mandatory-detail"
+        class="maestro-marker maestro-outcome-detail"
+        data-maestro-settled=""
+        hidden
+      ></p>
+      <p
+        id="maestro-static-default-unavailable"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro default never: status=pending
+      </p>
+      <p
+        id="maestro-static-default-error"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro default never: status=pending
+      </p>
+      <p
+        id="maestro-static-default-completed"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro default never: status=pending
+      </p>
+      <p
+        id="maestro-static-mandatory-unavailable"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro whenMandatory: status=pending
+      </p>
+      <p
+        id="maestro-static-mandatory-error"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro whenMandatory: status=pending
+      </p>
+      <p
+        id="maestro-static-mandatory-completed"
+        class="maestro-marker maestro-static-outcome"
+        data-maestro-static-outcome=""
+      >
+        Maestro whenMandatory: status=pending
+      </p>
+      <div
+        id="maestro-marker"
+        class="maestro-marker"
+        data-auto="false"
+        data-ios-ci-maestro="true"
+        hidden
+      ></div>
+      <div class="actions maestro-actions">
+        <button
+          id="maestro-run-default-never"
+          type="button"
+          class="ghost small"
+          aria-label="maestro-run-default-never"
+        >
+          Maestro default never
+        </button>
+        <button
+          id="maestro-run-when-mandatory"
+          type="button"
+          class="ghost small"
+          aria-label="maestro-run-when-mandatory"
+        >
+          Maestro whenMandatory
+        </button>
+      </div>
+    </div>
     <main class="shell">
       <header class="brand">
         <img class="brand-icon" src="/assets/capgo-icon.svg" width="40" height="40" alt="Capgo" />
@@ -52,6 +152,7 @@
           <button id="request-age-range" type="button">Request age range</button>
           <button id="get-version" class="ghost" type="button">Refresh plugin version</button>
         </div>
+
       </section>
 
       <section class="panel">

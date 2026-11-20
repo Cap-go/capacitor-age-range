@@ -4,8 +4,38 @@ import { AgeRange } from '@capgo/capacitor-age-range';
 import type { AgeRangeResult } from '@capgo/capacitor-age-range';
 
 import './style.css';
+import {
+  runMaestroAutoHarness,
+  runMaestroDefaultNever,
+  runMaestroWhenMandatory,
+  setMaestroHarnessStatus,
+} from './maestro';
 
-const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
+const runWhenDomReady = (bootstrap: () => void): void => {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootstrap, { once: true });
+    return;
+  }
+  bootstrap();
+};
+
+const bootstrap = (): void => {
+  const maestroMarker = document.getElementById('maestro-marker');
+  const isMaestroAutoHarness = maestroMarker?.getAttribute('data-auto') === 'true';
+  const isIosCiMaestroHarness =
+    Capacitor.getPlatform() === 'ios' &&
+    maestroMarker?.getAttribute('data-ios-ci-maestro') === 'true';
+
+  if (isIosCiMaestroHarness && !isMaestroAutoHarness) {
+    void runMaestroDefaultNever();
+  }
+
+  if (isMaestroAutoHarness) {
+    setMaestroHarnessStatus('Maestro harness: starting');
+    void runMaestroAutoHarness();
+  }
+
+  const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;
 const statusChipEl = document.getElementById('status-chip') as HTMLElement;
 const ageGatesInput = document.getElementById('age-gates') as HTMLInputElement;
 const requestButton = document.getElementById('request-age-range') as HTMLButtonElement;
@@ -64,14 +94,27 @@ const renderResultCard = (result: AgeRangeResult) => {
       `<p><span class="result-label">Declaration</span><strong>${result.declarationSource}</strong></p>`,
     );
   }
+  if (result.ageRangeSource) {
+    rows.push(`<p><span class="result-label">Age range source</span><strong>${result.ageRangeSource}</strong></p>`);
+  }
+  if (result.significantChangeStatus) {
+    rows.push(
+      `<p><span class="result-label">Significant change</span><strong>${result.significantChangeStatus}</strong></p>`,
+    );
+  }
   if (result.androidUserStatus) {
     rows.push(
       `<p><span class="result-label">Android user status</span><strong>${result.androidUserStatus}</strong></p>`,
     );
   }
-  if (result.mostRecentApprovalDate) {
+  if (result.significantChangeApprovalDate ?? result.mostRecentApprovalDate) {
     rows.push(
-      `<p><span class="result-label">Last approval</span><strong>${result.mostRecentApprovalDate}</strong></p>`,
+      `<p><span class="result-label">Last approval</span><strong>${result.significantChangeApprovalDate ?? result.mostRecentApprovalDate}</strong></p>`,
+    );
+  }
+  if (result.androidAgeSignalsAccessStatus) {
+    rows.push(
+      `<p><span class="result-label">Access status</span><strong>${result.androidAgeSignalsAccessStatus}</strong></p>`,
     );
   }
   if (result.installId) {
@@ -135,22 +178,38 @@ const requestAgeRange = async () => {
   }
 };
 
-requestButton.addEventListener('click', () => {
+requestButton?.addEventListener('click', () => {
   void requestAgeRange();
 });
 
-versionButton.addEventListener('click', () => {
+versionButton?.addEventListener('click', () => {
   void refreshPluginVersion();
 });
 
-clearJsonButton.addEventListener('click', () => {
+clearJsonButton?.addEventListener('click', () => {
   setJson(undefined);
 });
 
-void refreshPluginVersion();
+const maestroDefaultButton = document.getElementById('maestro-run-default-never') as HTMLButtonElement;
+const maestroMandatoryButton = document.getElementById('maestro-run-when-mandatory') as HTMLButtonElement;
 
-if (Capacitor.isNativePlatform()) {
-  CapacitorUpdater.notifyAppReady().catch((error) => {
-    console.error('Capgo notifyAppReady failed', error);
-  });
+maestroDefaultButton?.addEventListener('click', () => {
+  void runMaestroDefaultNever();
+});
+
+maestroMandatoryButton?.addEventListener('click', () => {
+  void runMaestroWhenMandatory();
+});
+
+if (!isMaestroAutoHarness) {
+  void refreshPluginVersion();
 }
+
+  if (Capacitor.isNativePlatform() && !isMaestroAutoHarness && !isIosCiMaestroHarness) {
+    CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
+      console.error('Capgo notifyAppReady failed', error);
+    });
+  }
+};
+
+runWhenDomReady(bootstrap);

@@ -7,7 +7,11 @@ import DeclaredAgeRange
 
 class AgeRangeImpl {
 
-    func requestAgeRange(ageGates: [Int], viewController: UIViewController, completion: @escaping ([String: Any]) -> Void) {
+    func requestAgeRange(
+        ageGates: [Int],
+        viewController: UIViewController,
+        completion: @escaping ([String: Any]) -> Void
+    ) {
         #if canImport(DeclaredAgeRange)
         if #available(iOS 26, *) {
             requestAgeRangeImpl(ageGates: ageGates, viewController: viewController, completion: completion)

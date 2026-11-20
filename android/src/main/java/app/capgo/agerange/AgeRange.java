@@ -1,16 +1,24 @@
 package app.capgo.agerange;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import app.capgo.agerange.classes.CustomExceptions;
 import app.capgo.agerange.classes.results.RequestAgeRangeResult;
 import app.capgo.agerange.interfaces.NonEmptyResultCallback;
+import com.getcapacitor.Logger;
 import com.google.android.gms.tasks.Task;
+import com.google.android.play.agesignals.AgeSignalsAccessRequest;
 import com.google.android.play.agesignals.AgeSignalsManager;
 import com.google.android.play.agesignals.AgeSignalsManagerFactory;
 import com.google.android.play.agesignals.AgeSignalsRequest;
 import com.google.android.play.agesignals.AgeSignalsResult;
+import com.google.android.play.agesignals.model.AgeSignalsStatus;
 
 public class AgeRange {
+
+    public static final String ACCESS_NEVER = "never";
+    public static final String ACCESS_ALWAYS = "always";
+    public static final String ACCESS_WHEN_MANDATORY = "whenMandatory";
 
     @NonNull
     private final AgeRangePlugin plugin;
@@ -19,14 +27,78 @@ public class AgeRange {
         this.plugin = plugin;
     }
 
-    public void requestAgeRange(@NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback) {
+    public void requestAgeRange(@NonNull String androidAgeSignalsAccess, @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback) {
         AgeSignalsManager manager = AgeSignalsManagerFactory.create(plugin.getActivity());
+        String accessMode = normalizeAccessMode(androidAgeSignalsAccess);
+
+        switch (accessMode) {
+            case ACCESS_ALWAYS:
+                requestAccessThenCheck(manager, callback);
+                break;
+            case ACCESS_WHEN_MANDATORY:
+                MandatorySharingProbe.resolve(
+                    manager,
+                    () -> requestAccessThenCheck(manager, callback),
+                    () -> checkAgeSignalsOnly(manager, callback),
+                    () -> checkAgeSignalsOnly(manager, callback)
+                );
+                break;
+            case ACCESS_NEVER:
+            default:
+                checkAgeSignalsOnly(manager, callback);
+                break;
+        }
+    }
+
+    @NonNull
+    static String normalizeAccessMode(@NonNull String accessMode) {
+        if (ACCESS_ALWAYS.equals(accessMode) || ACCESS_WHEN_MANDATORY.equals(accessMode)) {
+            return accessMode;
+        }
+        if (!ACCESS_NEVER.equals(accessMode)) {
+            Logger.warn(AgeRangePlugin.TAG, "Unknown androidAgeSignalsAccess '" + accessMode + "', using never.");
+        }
+        return ACCESS_NEVER;
+    }
+
+    private void requestAccessThenCheck(
+        @NonNull AgeSignalsManager manager,
+        @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback
+    ) {
+        AgeSignalsAccessRequest accessRequest = AgeSignalsAccessRequest.builder().setActivity(plugin.getActivity()).build();
+
+        manager
+            .requestAgeSignalsAccess(accessRequest)
+            .addOnSuccessListener((accessResult) -> {
+                Integer accessStatus = accessResult.ageSignalsStatus();
+                if (accessStatus != null && accessStatus == AgeSignalsStatus.SHARED) {
+                    checkAgeSignalsOnly(manager, callback, accessStatus);
+                    return;
+                }
+                try {
+                    callback.success(RequestAgeRangeResult.fromAgeSignalsAccessStatus(accessStatus));
+                } catch (Exception exception) {
+                    callback.error(exception);
+                }
+            })
+            .addOnFailureListener((exception) -> callback.error(mapErrorToException(exception)));
+    }
+
+    private void checkAgeSignalsOnly(@NonNull AgeSignalsManager manager, @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback) {
+        checkAgeSignalsOnly(manager, callback, null);
+    }
+
+    private void checkAgeSignalsOnly(
+        @NonNull AgeSignalsManager manager,
+        @NonNull NonEmptyResultCallback<RequestAgeRangeResult> callback,
+        @Nullable Integer ageSignalsAccessStatus
+    ) {
         AgeSignalsRequest request = AgeSignalsRequest.builder().build();
 
         Task<AgeSignalsResult> task = manager.checkAgeSignals(request);
         task.addOnSuccessListener((ageSignalsResult) -> {
             try {
-                RequestAgeRangeResult result = new RequestAgeRangeResult(ageSignalsResult);
+                RequestAgeRangeResult result = new RequestAgeRangeResult(ageSignalsResult, ageSignalsAccessStatus);
                 callback.success(result);
             } catch (Exception exception) {
                 callback.error(exception);

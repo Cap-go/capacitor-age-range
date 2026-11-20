@@ -9,7 +9,8 @@ export interface AgeRangePlugin {
   /**
    * Request the user's age range.
    *
-   * On Android: queries Google Play Age Signals API (no user prompt).
+   * On Android: queries Google Play Age Signals API. By default no in-app prompt is shown;
+   * set `androidAgeSignalsAccess` to request sharing access when needed.
    * On iOS: presents the system DeclaredAgeRange dialog (requires iOS 26.2+).
    *
    * @param options - Configuration for the age range request
@@ -58,6 +59,20 @@ export interface RequestAgeRangeOptions {
    * @since 8.0.0
    */
   ageGates?: number[];
+
+  /**
+   * Android-only. Whether to call `requestAgeSignalsAccess()` before `checkAgeSignals()`.
+   *
+   * - `never` (default): calls `checkAgeSignals()` only, matching pre-0.0.4 behavior with no in-app sharing prompt.
+   * - `always`: always requests access first (Google may show the sharing prompt when applicable).
+   * - `whenMandatory`: requests access only when `getApplicableAgeFeatures()` reports `MANDATORY_SHARING` (Play Age Signals 0.0.6+ at runtime; on 0.0.4 to 0.0.5 or failure falls back to `checkAgeSignals()` only).
+   *
+   * Unknown values are logged on Android and treated as `never`.
+   *
+   * @default 'never'
+   * @since 8.3.0
+   */
+  androidAgeSignalsAccess?: AndroidAgeSignalsAccessMode;
 }
 
 /**
@@ -95,25 +110,58 @@ export interface AgeRangeResult {
    * How the age was declared/determined.
    *
    * On iOS: 'SELF_DECLARED' or 'GUARDIAN_DECLARED'.
-   * On Android: 'SUPERVISED' (guardian-managed) or 'VERIFIED' (Google-verified 18+).
+   * On Android: derived from `ageRangeSource` (TIER_A self-declared, TIER_B guardian-managed, TIER_C/TIER_D verified).
    *
    * @since 8.0.0
    */
   declarationSource?: DeclarationSource;
 
   /**
-   * Android-only. The user's Google Play verification status.
+   * Android-only. Legacy mapping from Play Age Signals 0.0.2 `userStatus()`.
    *
+   * Play Age Signals 0.0.4+ removed this field. The plugin derives approximate values from
+   * `ageRangeSource` and `significantChangeStatus` for backward compatibility. Prefer those fields.
+   *
+   * @deprecated since 8.3.0. Use `ageRangeSource` and `significantChangeStatus` instead.
    * @since 8.0.0
    */
   androidUserStatus?: AndroidUserStatus;
 
   /**
-   * Android-only. Effective date for the most recent guardian-approved change.
+   * Android-only. How Google classified the shared age range (Play Age Signals 0.0.4+).
    *
+   * @since 8.3.0
+   */
+  ageRangeSource?: AndroidAgeRangeSource;
+
+  /**
+   * Android-only. Approval status for significant account changes in applicable jurisdictions.
+   *
+   * @since 8.3.0
+   */
+  significantChangeStatus?: AndroidSignificantChangeStatus;
+
+  /**
+   * Android-only. Effective date of the most recently approved significant change.
+   *
+   * @since 8.3.0
+   */
+  significantChangeApprovalDate?: string;
+
+  /**
+   * Android-only. Alias for `significantChangeApprovalDate` (Play 0.0.2 field name).
+   *
+   * @deprecated since 8.3.0. Use `significantChangeApprovalDate`.
    * @since 8.0.0
    */
   mostRecentApprovalDate?: string;
+
+  /**
+   * Android-only. Result of `requestAgeSignalsAccess()` when `androidAgeSignalsAccess` is not `never`.
+   *
+   * @since 8.3.0
+   */
+  androidAgeSignalsAccessStatus?: AndroidAgeSignalsAccessStatus;
 
   /**
    * Android-only. Install identifier for supervised installs in Google Play.
@@ -164,6 +212,7 @@ export type DeclarationSource =
 /**
  * Android-specific Google Play user status values.
  *
+ * @deprecated since 8.3.0. Mapped from `ageRangeSource` / `significantChangeStatus` on Play Age Signals 0.0.4+.
  * @since 8.0.0
  */
 export type AndroidUserStatus =
@@ -173,3 +222,31 @@ export type AndroidUserStatus =
   | 'SUPERVISED_APPROVAL_DENIED'
   | 'UNKNOWN'
   | 'EMPTY';
+
+/**
+ * Android-only. Controls the Play Age Signals access request flow.
+ *
+ * @since 8.3.0
+ */
+export type AndroidAgeSignalsAccessMode = 'never' | 'always' | 'whenMandatory';
+
+/**
+ * Android-only. Play Age Signals `ageRangeSource` tier (API 0.0.4+).
+ *
+ * @since 8.3.0
+ */
+export type AndroidAgeRangeSource = 'UNSPECIFIED' | 'TIER_A' | 'TIER_B' | 'TIER_C' | 'TIER_D';
+
+/**
+ * Android-only. Play Age Signals `significantChangeStatus` (API 0.0.4+).
+ *
+ * @since 8.3.0
+ */
+export type AndroidSignificantChangeStatus = 'UNSPECIFIED' | 'APPROVED' | 'PENDING' | 'DECLINED';
+
+/**
+ * Android-only. Play Age Signals access status from `requestAgeSignalsAccess()`.
+ *
+ * @since 8.3.0
+ */
+export type AndroidAgeSignalsAccessStatus = 'UNSPECIFIED' | 'SHARED' | 'NOT_SHARED' | 'VERIFICATION_REQUIRED';

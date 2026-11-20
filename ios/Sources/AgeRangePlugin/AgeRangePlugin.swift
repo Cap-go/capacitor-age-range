@@ -22,7 +22,10 @@ public class AgeRangePlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
 
-        implementation.requestAgeRange(ageGates: ageGates, viewController: viewController) { result in
+        implementation.requestAgeRange(
+            ageGates: ageGates,
+            viewController: viewController
+        ) { result in
             call.resolve(result)
         }
     }

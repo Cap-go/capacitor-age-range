@@ -39,6 +39,7 @@
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
     "verify:ios": "xcodebuild -scheme CapgoCapacitorAgeRange -destination generic/platform=iOS",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:android:play-0.0.4": "cd android && ./gradlew clean build test -PandroidPlayAgeSignalsVersion=0.0.4 && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
@@ -54,7 +55,12 @@
     "check:cap9-deprecated": "node scripts/check-cap9-deprecated.mjs",
     "changelog:ai": "node scripts/generate-ai-changelog.mjs",
     "example:install": "cd example-app && bun install --frozen-lockfile",
-    "example:build": "bun run build && cd example-app && bun install --frozen-lockfile && bun run build"
+    "example:build": "bun run build && cd example-app && bun install --frozen-lockfile && bun run build",
+    "example-app:prepare:android": "CAPGO_MAESTRO_CI=1 bun run build && cd example-app && CAPGO_MAESTRO_CI=1 bun install --frozen-lockfile && CAPGO_MAESTRO_CI=1 bun run build && (test -d android || bunx cap add android) && CAPGO_MAESTRO_CI=1 bunx cap sync android && cd android && ./gradlew app:assembleDebug",
+    "maestro:test:android:e2e": "export MAESTRO_DRIVER_STARTUP_TIMEOUT=180000 MAESTRO_CLI_NO_ANALYTICS=1 && sh ./scripts/prepare-android-maestro-device.sh && sh ./scripts/install-android-apk-with-retry.sh example-app/android/app/build/outputs/apk/debug/app-debug.apk && sh ./scripts/start-android-maestro-app.sh app.capgo.age.range app.capgo.age.range/.MainActivity && $HOME/.maestro/bin/maestro test .maestro/age-range-android-e2e.yaml .maestro/age-range-android-default-error.yaml",
+    "maestro:test:android:default-never": "export MAESTRO_DRIVER_STARTUP_TIMEOUT=180000 MAESTRO_CLI_NO_ANALYTICS=1 && sh ./scripts/prepare-android-maestro-device.sh && sh ./scripts/install-android-apk-with-retry.sh example-app/android/app/build/outputs/apk/debug/app-debug.apk && sh ./scripts/start-android-maestro-app.sh app.capgo.age.range app.capgo.age.range/.MainActivity && $HOME/.maestro/bin/maestro test .maestro/age-range-default-android.yaml",
+    "maestro:test:android:when-mandatory": "export MAESTRO_DRIVER_STARTUP_TIMEOUT=180000 MAESTRO_CLI_NO_ANALYTICS=1 && sh ./scripts/prepare-android-maestro-device.sh && sh ./scripts/install-android-apk-with-retry.sh example-app/android/app/build/outputs/apk/debug/app-debug.apk && sh ./scripts/start-android-maestro-app.sh app.capgo.age.range app.capgo.age.range/.MainActivity && $HOME/.maestro/bin/maestro test .maestro/age-range-when-mandatory-android.yaml",
+    "maestro:test:ios:unavailable": "export MAESTRO_DRIVER_STARTUP_TIMEOUT=120000 MAESTRO_CLI_NO_ANALYTICS=1 && sh ./scripts/run-ios-maestro-age-range.sh"
   },
   "devDependencies": {
     "@capacitor/android": "^8.0.0",

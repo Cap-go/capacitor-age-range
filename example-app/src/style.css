@@ -264,6 +264,83 @@ button:not(:disabled):hover {
   font-size: 0.85rem;
 }
 
+.maestro-status {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid var(--panel-border);
+  background: var(--panel);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.maestro-ready {
+  margin: 0.25rem 0 0;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.maestro-status .maestro-ready:first-child {
+  margin-top: 0;
+}
+
+.maestro-marker {
+  margin: 0.5rem 0 0;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.maestro-static-outcome {
+  display: none;
+}
+
+.maestro-outcome-detail[hidden] {
+  display: none !important;
+}
+
+.maestro-outcome-detail:not([hidden]) {
+  display: block;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+.maestro-a11y-outcome {
+  display: block;
+  margin: 0.25rem 0 0;
+  font-weight: 700;
+  color: var(--accent-strong);
+}
+
+body.maestro-outcome-default-unavailable #maestro-static-default-unavailable {
+  display: block;
+}
+
+body.maestro-outcome-default-error #maestro-static-default-error {
+  display: block;
+}
+
+body.maestro-outcome-default-completed #maestro-static-default-completed {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-unavailable #maestro-static-mandatory-unavailable {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-error #maestro-static-mandatory-error {
+  display: block;
+}
+
+body.maestro-outcome-mandatory-completed #maestro-static-mandatory-completed {
+  display: block;
+}
+
+.maestro-actions {
+  margin-top: 0.5rem;
+}
+
 @media (max-width: 480px) {
   body {
     padding: 0.75rem;
