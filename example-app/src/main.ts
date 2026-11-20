@@ -174,6 +174,22 @@ maestroMandatoryButton.addEventListener('click', () => {
 
 void refreshPluginVersion();
 
+const runNativeMaestroHarness = async () => {
+  const marker = document.getElementById('maestro-marker');
+  if (!marker || marker.dataset.auto !== 'true') {
+    return;
+  }
+  await refreshPluginVersion();
+  await runMaestroDefaultNever();
+  if (Capacitor.getPlatform() === 'android') {
+    await runMaestroWhenMandatory();
+  }
+};
+
+if (Capacitor.isNativePlatform()) {
+  void runNativeMaestroHarness();
+}
+
 if (Capacitor.isNativePlatform()) {
   CapacitorUpdater.notifyAppReady().catch((error) => {
     console.error('Capgo notifyAppReady failed', error);
