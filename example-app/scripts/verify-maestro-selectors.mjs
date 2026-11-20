@@ -10,6 +10,8 @@ const requiredIds = [
   'maestro-ready',
   'maestro-run-default-never',
   'maestro-run-when-mandatory',
+  'maestro-outcome-default-detail',
+  'maestro-outcome-mandatory-detail',
   'maestro-marker',
 ];
 

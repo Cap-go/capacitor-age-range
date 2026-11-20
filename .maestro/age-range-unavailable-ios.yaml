@@ -6,6 +6,7 @@ appId: app.capgo.age.range
     visible: 'Maestro ready'
     timeout: 90000
 - extendedWaitUntil:
-    visible: 'Maestro default never: unavailable status=NOT_AVAILABLE'
+    visible:
+      id: maestro-outcome-default-detail
     timeout: 60000
 - assertVisible: 'Maestro default never: unavailable status=NOT_AVAILABLE'

@@ -19,6 +19,9 @@ androidWebViewHierarchy: devtools
     id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible: 'Maestro default never:'
+    visible:
+      id: maestro-outcome-default-detail
     timeout: 300000
+- assertVisible:
+    id: maestro-outcome-default-detail
 - assertVisible: 'Maestro default never:'

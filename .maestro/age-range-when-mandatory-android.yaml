@@ -18,6 +18,9 @@ androidWebViewHierarchy: devtools
     id: 'maestro-run-when-mandatory'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible: 'Maestro whenMandatory:'
+    visible:
+      id: maestro-outcome-mandatory-detail
     timeout: 300000
+- assertVisible:
+    id: maestro-outcome-mandatory-detail
 - assertVisible: 'Maestro whenMandatory:'

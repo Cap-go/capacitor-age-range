@@ -4,7 +4,7 @@ End-to-end flows for the example app on Android emulators and the iOS Simulator.
 
 ### Covered in CI
 
-- **Default access (`never`)**: calls `checkAgeSignals()` without `requestAgeSignalsAccess()`. On emulators this usually finishes with `NOT_AVAILABLE` or a Play Services error, which is the expected unavailable path.
+- **Default access (`never`)**: calls `checkAgeSignals()` without `requestAgeSignalsAccess()`. CI asserts the harness label `Maestro default never: status=…` from the real plugin result (iOS Simulator: `NOT_AVAILABLE`; Android emulators often `ERROR` with `API_NOT_AVAILABLE` or similar).
 - **`whenMandatory` on Android**: exercises reflection/fallback for `getApplicableAgeFeatures()`. Emulators without mandatory sharing still complete via `checkAgeSignals()`.
 - **iOS Simulator**: `requestAgeRange()` without Declared Age Range support returns `NOT_AVAILABLE`.
 

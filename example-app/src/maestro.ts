@@ -7,6 +7,11 @@ const MAESTRO_PLUGIN_TIMEOUT_MS = 20_000;
 type MaestroFlow = 'default' | 'mandatory';
 type MaestroBucket = 'unavailable' | 'error' | 'completed';
 
+const DETAIL_OUTCOME_IDS: Record<MaestroFlow, string> = {
+  default: 'maestro-outcome-default-detail',
+  mandatory: 'maestro-outcome-mandatory-detail',
+};
+
 const flowLabel = (flow: MaestroFlow): string =>
   flow === 'default' ? 'Maestro default never' : 'Maestro whenMandatory';
 
@@ -38,6 +43,20 @@ const formatErrorLine = (flow: MaestroFlow, error: unknown): string => {
   return `${flowLabel(flow)}: error code=${code} message=${message}`;
 };
 
+const publishOutcomeLine = (flow: MaestroFlow, bucket: MaestroBucket, line: string): void => {
+  const target = document.getElementById(outcomeElementId(flow, bucket));
+  if (target) {
+    target.textContent = line;
+  }
+  const detail = document.getElementById(DETAIL_OUTCOME_IDS[flow]);
+  if (detail) {
+    detail.textContent = line;
+    detail.dataset.maestroSettled = 'true';
+    detail.removeAttribute('hidden');
+  }
+  document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
+};
+
 export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promise<T> => {
   return new Promise<T>((resolve, reject) => {
     const timer = setTimeout(() => {
@@ -66,23 +85,16 @@ export const setMaestroHarnessStatus = (message: string) => {
 export const publishMaestroPluginOutcome = (flow: MaestroFlow, result: AgeRangeResult): void => {
   const bucket = bucketForStatus(result.status);
   const line = formatResultLine(flow, result.status);
-  const target = document.getElementById(outcomeElementId(flow, bucket));
-  if (target) {
-    target.textContent = line;
-  }
-  document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
+  publishOutcomeLine(flow, bucket, line);
 };
 
 export const publishMaestroPluginError = (flow: MaestroFlow, error: unknown): void => {
   const line = formatErrorLine(flow, error);
-  const target = document.getElementById(outcomeElementId(flow, 'error'));
-  if (target) {
-    target.textContent = line;
-  }
-  document.body.classList.add(`maestro-outcome-${flow}-error`);
+  publishOutcomeLine(flow, 'error', line);
 };
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
+  setMaestroHarnessStatus('Maestro harness: starting');
   try {
     const result = await withMaestroTimeout(
       AgeRange.requestAgeRange({ ageGates: [13, 16, 18] }),
@@ -95,6 +107,7 @@ export const runMaestroDefaultNever = async (): Promise<void> => {
 };
 
 export const runMaestroWhenMandatory = async (): Promise<void> => {
+  setMaestroHarnessStatus('Maestro harness: starting');
   try {
     const result = await withMaestroTimeout(
       AgeRange.requestAgeRange({
