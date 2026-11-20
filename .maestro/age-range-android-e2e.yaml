@@ -17,17 +17,13 @@ androidWebViewHierarchy: devtools
     id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible:
-      id: 'maestro-static-default-unavailable'
+    visible: 'Maestro default never: unavailable'
     timeout: 60000
-- assertVisible:
-    id: 'maestro-static-default-unavailable'
+- assertVisible: 'Maestro default never: unavailable'
 - tapOn:
     id: 'maestro-run-when-mandatory'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible:
-      id: 'maestro-static-mandatory-unavailable'
+    visible: 'Maestro whenMandatory: unavailable'
     timeout: 60000
-- assertVisible:
-    id: 'maestro-static-mandatory-unavailable'
+- assertVisible: 'Maestro whenMandatory: unavailable'

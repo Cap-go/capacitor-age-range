@@ -11,8 +11,6 @@ appId: app.capgo.age.range
     id: 'maestro-run-default-never'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible:
-      id: 'maestro-static-default-unavailable'
+    visible: 'Maestro default never: unavailable'
     timeout: 60000
-- assertVisible:
-    id: 'maestro-static-default-unavailable'
+- assertVisible: 'Maestro default never: unavailable'

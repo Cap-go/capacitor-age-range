@@ -45,7 +45,7 @@ export const classifyMaestroOutcome = (status: string | undefined, isError: bool
 };
 
 export const revealMaestroStaticOutcome = (flow: MaestroFlow, bucket: MaestroBucket) => {
-  document.getElementById(staticOutcomeId(flow, bucket))?.removeAttribute('hidden');
+  document.body.classList.add(`maestro-outcome-${flow}-${bucket}`);
 };
 
 export const runMaestroDefaultNever = async (): Promise<void> => {
