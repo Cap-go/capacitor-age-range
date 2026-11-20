@@ -6,9 +6,14 @@ androidWebViewHierarchy: devtools
 - tapOn:
     text: 'Wait'
     optional: true
+- scrollUntilVisible:
+    element:
+      id: 'maestro-ready'
+    direction: DOWN
+    timeout: 240000
 - extendedWaitUntil:
     visible: 'Maestro ready'
-    timeout: 180000
+    timeout: 60000
 - extendedWaitUntil:
     visible: 'Maestro default never:'
     timeout: 120000

@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <div id="maestro-status" class="maestro-status" aria-live="polite">
+      <div id="maestro-ready" class="maestro-ready">Maestro ready</div>
+      <p id="maestro-harness-line" class="maestro-ready">Maestro harness: boot</p>
+      <div id="maestro-marker" class="maestro-marker" data-auto="true" hidden></div>
+    </div>
     <main class="shell">
       <header class="brand">
         <img class="brand-icon" src="/assets/capgo-icon.svg" width="40" height="40" alt="Capgo" />
@@ -53,9 +58,6 @@
           <button id="get-version" class="ghost" type="button">Refresh plugin version</button>
         </div>
 
-        <div id="maestro-ready" class="maestro-ready">Maestro ready</div>
-        <p id="maestro-harness-line" class="maestro-ready">Maestro harness: boot</p>
-        <div id="maestro-marker" class="maestro-marker" data-auto="true" hidden></div>
         <div class="actions maestro-actions">
           <button
             id="maestro-run-default-never"

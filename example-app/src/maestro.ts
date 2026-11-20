@@ -33,8 +33,8 @@ export const setMaestroHarnessStatus = (message: string) => {
     if (ready) {
       ready.textContent = message;
     }
+    document.title = message;
   }
-  document.title = message;
 };
 
 export const setMaestroMarker = (message: string) => {
