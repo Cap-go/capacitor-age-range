@@ -28,10 +28,13 @@ export const setMaestroHarnessStatus = (message: string) => {
   if (harnessLine) {
     harnessLine.textContent = message;
   }
-  const ready = document.getElementById('maestro-ready');
-  if (ready) {
-    ready.textContent = `Maestro ready\n${message}`;
+  if (message.startsWith('Maestro default never:') || message.startsWith('Maestro whenMandatory:')) {
+    const ready = document.getElementById('maestro-ready');
+    if (ready) {
+      ready.textContent = message;
+    }
   }
+  document.title = message;
 };
 
 export const setMaestroMarker = (message: string) => {
@@ -41,7 +44,6 @@ export const setMaestroMarker = (message: string) => {
     el.removeAttribute('hidden');
     el.textContent = message;
   }
-  document.title = message;
 };
 
 export const classifyMaestroOutcome = (status: string | undefined, isError: boolean): string => {
