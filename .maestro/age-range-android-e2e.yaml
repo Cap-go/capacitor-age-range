@@ -19,22 +19,23 @@ androidWebViewHierarchy: devtools
 - extendedWaitUntil:
     visible:
       id: 'maestro-outcome-default-detail'
-    timeout: 90000
+    timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-default-detail'
 - assertVisible:
     id: 'maestro-outcome-default-detail'
     text: '.*Maestro default never: .*(error code=API_NOT_AVAILABLE|unavailable status=NOT_AVAILABLE|completed status=DECLINED_SHARING).*'
+- assertNotVisible:
+    text: '.*UNIMPLEMENTED.*'
 - tapOn:
     id: 'maestro-run-when-mandatory'
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible:
       id: 'maestro-outcome-mandatory-detail'
-    timeout: 90000
+    timeout: 45000
 - assertVisible:
     id: 'maestro-outcome-mandatory-detail'
-- assertVisible:
     text: '.*Maestro whenMandatory: .*status=NOT_AVAILABLE.*'
 - assertNotVisible:
     text: '.*UNIMPLEMENTED.*'
