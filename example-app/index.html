@@ -54,7 +54,7 @@
         </div>
 
         <div id="maestro-ready" class="maestro-ready">Maestro ready</div>
-        <div id="maestro-marker" class="maestro-marker" data-auto="true" hidden></div>
+        <div id="maestro-marker" class="maestro-marker" data-auto="true">Maestro harness: boot</div>
         <div class="actions maestro-actions">
           <button
             id="maestro-run-default-never"
@@ -90,21 +90,6 @@
         <pre id="json-output" class="json-pane">{}</pre>
       </section>
     </main>
-    <script>
-      document.addEventListener(
-        'DOMContentLoaded',
-        function () {
-          var marker = document.getElementById('maestro-marker');
-          if (!marker || marker.getAttribute('data-auto') !== 'true') {
-            return;
-          }
-          marker.removeAttribute('hidden');
-          marker.textContent = 'Maestro harness: boot';
-          document.title = 'Maestro harness: boot';
-        },
-        { once: true },
-      );
-    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

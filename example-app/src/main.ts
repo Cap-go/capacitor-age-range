@@ -20,9 +20,7 @@ const runWhenDomReady = (bootstrap: () => void): void => {
 };
 
 const bootstrap = (): void => {
-  const isMaestroAutoHarness =
-    Capacitor.isNativePlatform() &&
-    document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
+  const isMaestroAutoHarness = document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
 
   if (isMaestroAutoHarness) {
     setMaestroMarker('Maestro harness: starting');
@@ -213,9 +211,9 @@ const runNativeMaestroHarness = async () => {
   }
 };
 
-if (Capacitor.isNativePlatform()) {
-  void runNativeMaestroHarness();
-}
+  if (isMaestroAutoHarness) {
+    void runNativeMaestroHarness();
+  }
 
   if (Capacitor.isNativePlatform() && !isMaestroAutoHarness) {
     CapacitorUpdater.notifyAppReady().catch((error: unknown) => {
