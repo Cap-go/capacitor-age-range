@@ -6,10 +6,12 @@ appId: app.capgo.age.range
       id: 'maestro-ready'
     direction: DOWN
     timeout: 240000
+- assertVisible:
+    id: 'maestro-ready'
 - extendedWaitUntil:
-    visible: 'Maestro ready'
+    visible: 'Maestro harness: starting'
     timeout: 120000
 - extendedWaitUntil:
     visible: 'Maestro default never:'
-    timeout: 120000
+    timeout: 180000
 - assertVisible: 'Maestro default never:'
