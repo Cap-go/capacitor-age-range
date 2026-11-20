@@ -7,7 +7,7 @@ import './style.css';
 import {
   runMaestroDefaultNever,
   runMaestroWhenMandatory,
-  setMaestroMarker,
+  setMaestroHarnessStatus,
   withMaestroTimeout,
 } from './maestro';
 
@@ -23,7 +23,7 @@ const bootstrap = (): void => {
   const isMaestroAutoHarness = document.getElementById('maestro-marker')?.getAttribute('data-auto') === 'true';
 
   if (isMaestroAutoHarness) {
-    setMaestroMarker('Maestro harness: starting');
+    setMaestroHarnessStatus('Maestro harness: starting');
   }
 
   const pluginVersionEl = document.getElementById('plugin-version') as HTMLElement;

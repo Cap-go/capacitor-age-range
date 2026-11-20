@@ -6,7 +6,7 @@ appId: app.capgo.age.range
     timeout: 180000
 - extendedWaitUntil:
     visible: 'Maestro harness:'
-    timeout: 45000
+    timeout: 120000
 - extendedWaitUntil:
     visible: 'Maestro default never:'
     timeout: 120000

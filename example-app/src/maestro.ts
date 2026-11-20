@@ -23,16 +23,16 @@ export const withMaestroTimeout = <T>(promise: Promise<T>, label: string): Promi
   });
 };
 
-export const setMaestroMarker = (message: string) => {
-  const el = markerEl();
-  const ready = document.getElementById('maestro-ready');
+export const setMaestroHarnessStatus = (message: string) => {
   const harnessLine = document.getElementById('maestro-harness-line');
   if (harnessLine) {
     harnessLine.textContent = message;
   }
-  if (ready) {
-    ready.textContent = message;
-  }
+};
+
+export const setMaestroMarker = (message: string) => {
+  const el = markerEl();
+  setMaestroHarnessStatus(message);
   if (el) {
     el.removeAttribute('hidden');
     el.textContent = message;
