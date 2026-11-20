@@ -11,11 +11,7 @@ appId: app.capgo.age.range
     direction: DOWN
     timeout: 120000
 - tapOn:
-<<<<<<< Updated upstream
     text: 'Maestro default never'
-=======
-    id: 'maestro-run-default-never'
->>>>>>> Stashed changes
     retryTapIfNoChange: true
 - extendedWaitUntil:
     visible: 'Maestro default never:'
