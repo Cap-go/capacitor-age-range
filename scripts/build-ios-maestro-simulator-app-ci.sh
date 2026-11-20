@@ -18,6 +18,12 @@ if [ ! -d ios ]; then
 fi
 bunx cap sync ios
 
+info_plist="ios/App/App/Info.plist"
+if [ -f "$info_plist" ]; then
+  /usr/libexec/PlistBuddy -c "Delete :CapgoMaestroCiUnavailable" "$info_plist" 2>/dev/null || true
+  /usr/libexec/PlistBuddy -c "Add :CapgoMaestroCiUnavailable bool true" "$info_plist"
+fi
+
 xcodebuild \
   -project ios/App/App.xcodeproj \
   -scheme App \
