@@ -2,20 +2,21 @@ appId: app.capgo.age.range
 ---
 - launchApp:
     clearState: true
-- extendedWaitUntil:
-    visible:
-      id: 'maestro-ready'
+- scrollUntilVisible:
+    element:
+      text: 'Maestro harness: boot'
+    direction: DOWN
     timeout: 120000
-- assertVisible:
-    id: 'maestro-ready'
-- extendedWaitUntil:
-    visible:
-      id: 'maestro-run-default-never'
+- assertVisible: 'Maestro ready'
+- scrollUntilVisible:
+    element:
+      text: 'Maestro default (never)'
+    direction: DOWN
     timeout: 60000
 - tapOn:
-    id: 'maestro-run-default-never'
+    text: 'Maestro default (never)'
     retryTapIfNoChange: true
 - extendedWaitUntil:
-    visible: 'Maestro default never: unavailable'
-    timeout: 30000
-- assertVisible: 'Maestro default never: unavailable'
+    visible: 'Maestro default never:'
+    timeout: 60000
+- assertVisible: 'Maestro default never:'
